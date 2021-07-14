@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Repository.dart';
-import 'package:orderfood/Test.dart';
 import 'package:orderfood/splashScreen.dart';
 
 
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
     // SystemChrome.setPreferredOrientations([
     //   DeviceOrientation.portraitUp,
     //   DeviceOrientation.portraitDown,
-    // ]);//////////////////////////////////////////////////////////////////////////////////
+    // ]);
     return  MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AppCubit(repository)),
