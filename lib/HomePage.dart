@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
+import 'package:orderfood/LoginPage.dart';
 import 'package:orderfood/Widgets/BuildCategoryItem.dart';
 import 'package:orderfood/Widgets/BuildHomePage.dart';
 import 'package:orderfood/Widgets/BuildResturantItem.dart';
@@ -117,6 +119,10 @@ class HomePage extends StatelessWidget {
                         ListTile(
                           title: Text("My Profile"),
                           leading: Icon(Icons.person_rounded),
+                          onTap: () {
+                            appCubit.changeposition(3);
+                            Navigator.pop(context);
+                          },
                         ),
                         ListTile(
                           title: Text("Payment method"),
@@ -146,8 +152,10 @@ class HomePage extends StatelessWidget {
                     child: CustomButtom(
                       width: 120,
                       buttoncolor: Color(0xffF9881F),
-                      buttonFunction: () {
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
+                      buttonFunction: () async{
+                        await FirebaseAuth.instance.signOut();
+                        appCubit.changeposition(0);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
                       },
                       Buttontext: "Log out",
                       textStyle: TextStyle(

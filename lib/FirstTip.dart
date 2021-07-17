@@ -150,14 +150,3 @@ class FirstTip extends StatelessWidget {
     );
   }
 }
-
-// class _FirstTipState extends State<FirstTip> {
-//
-//   @override
-//   void initState() {
-//
-//     // TODO: implement initState
-//     super.initState();
-//   }
-//
-// }
