@@ -2,51 +2,66 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Models/Category.dart';
 import 'package:orderfood/Models/Charachter.dart';
 import 'package:orderfood/Models/Restaurant.dart';
+import 'package:orderfood/Models/UserAccount.dart';
 
 class Services{
 
 
-  static Future<bool> Login(String username,String password)async{
+  static Future<UserAccount?> Login(String username,String password)async{
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential= await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: username,
           password: password
       );
-      return true;
+       Map<String,dynamic> dd =await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.uid).get().then((value) {
+         return value.data()!;
+        });
+       return UserAccount.fromJson(dd);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
-      return false;
+      return null;
     }
   }
 
-  static Future<bool> Register(String username,String password)async{
+  static Future<UserAccount?> Register(String username,String password,String name)async{
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential= await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: username,
           password: password
       );
-      return true;
+      UserAccount account =UserAccount(username, password,name,userCredential.user!.uid);
+      DocumentReference documentReference = FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.uid);
+      documentReference.set(account.toJson());
+      return account;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
+        return null;
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+        return null;
       }
-      return false;
+     // return false;
     } catch (e) {
       print(e);
-      return false;
+      return null;
 
     }
   }
 
+  static Future<void>UpdateProfile(UserAccount userAccount,String id,AppCubit appCubit)async{
+     await FirebaseFirestore.instance.collection("Users").doc(id).update(userAccount.toJson()).then((value) {
+       appCubit.updateaccount(userAccount);
+     });
+  }
   static Future<bool> adddata(Category restaurant)async {
     CollectionReference users = FirebaseFirestore.instance.collection('Categories');
     return users.add(restaurant.toJson()).then((value) {

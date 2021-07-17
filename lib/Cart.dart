@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:orderfood/PaymentPage.dart';
+import 'package:orderfood/Widgets/BuildCartPage.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
@@ -72,40 +73,7 @@ class _CartState extends State<Cart> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Container(
-          color: Color(0xffF8FBFF),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomSizedBox(38),
-              CustomHeader("Your Cart"),
-              CustomSizedBox(38),
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => CustomSizedBox(20),
-                  itemBuilder: (context, index) =>  Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: BuildItem(),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Delete',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        //  onTap: () => _showSnackBar('Delete'),
-                      ),
-                    ],
-                  ),
-                  itemCount: 3,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      body: BuildCartPage()
       //appBar: AppBar(),
     );
   }

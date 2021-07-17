@@ -78,8 +78,8 @@ class LoginPage extends StatelessWidget {
                         width: MediaQuery.of(context).size.width-70,
                         buttoncolor: Color(0xffF9881F),
                         buttonFunction: () {
-                          appCubit.LoadData();
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
+                          //appCubit.LoadData();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
                         },
                         Buttontext: "Create an account",
                         textStyle: TextStyle(

@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     // ]);
     return  MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AppCubit(repository)),
+        BlocProvider(create: (_) => AppCubit(repository)..GetAllCategories()..GetAllResturants()),
       ],
       child: ScreenUtilInit(
         builder: () =>  MaterialApp(
