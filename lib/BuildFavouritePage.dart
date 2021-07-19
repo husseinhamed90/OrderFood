@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
@@ -23,7 +24,7 @@ class BuildFavouritePage extends StatelessWidget {
                 itemBuilder: (context, index) =>  Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
-                  child: BuildItem(),
+                  child: BuildItem(AppCubit.get(context).account!.favourite[index]),
                   secondaryActions: <Widget>[
                     IconSlideAction(
                       caption: 'Delete',
@@ -33,7 +34,7 @@ class BuildFavouritePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                itemCount: 2,
+                itemCount: AppCubit.get(context).account!.favourite.length,
               ),
             )
           ],

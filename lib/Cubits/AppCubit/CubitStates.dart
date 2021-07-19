@@ -23,3 +23,11 @@ class EmptyFeildsFound extends CubitState{}
 
 class setcontroll extends CubitState{}
 class AccountisUpdated extends CubitState{}
+
+class MealAddedToAccount extends CubitState{}
+class MealAddedToFavourite extends CubitState{}
+
+class AddMealToCartLoadingState extends CubitState{}
+
+class quantityofMealIncreased extends CubitState{}
+class quantityofMealDecreased extends CubitState{}

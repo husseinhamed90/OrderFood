@@ -3,7 +3,8 @@ import 'package:orderfood/Models/Meal.dart';
 class UserAccount{
   late String username,Password,name;
   late String id;
-   List<Meal>Meals=[];
+  List<Meal>Meals=[];
+  List<Meal>favourite=[];
 
   UserAccount(this.username, this.Password,this.name,this.id);
 
@@ -15,6 +16,9 @@ class UserAccount{
     for(int i=0;i<json['Meals'].length;i++){
       Meals.add(Meal.fromJson(json['Meals'][i]));
     }
+    for(int i=0;i<json['favourite'].length;i++){
+      favourite.add(Meal.fromJson(json['favourite'][i]));
+    }
   
   }
 
@@ -25,6 +29,7 @@ class UserAccount{
     data['id'] = this.id;
     data['name']=this.name;
     data['Meals']=Meals.map((e) => e.toJson()).toList();
+    data['favourite']=favourite.map((e) => e.toJson()).toList();
     return data;
   }
 }

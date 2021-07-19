@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
@@ -11,7 +12,7 @@ class BuildCartPage extends StatelessWidget {
         color: Color(0xffF8FBFF),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: Column(
+        child: (AppCubit.get(context).account!.Meals.length>0)?Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomSizedBox(38),
@@ -23,7 +24,7 @@ class BuildCartPage extends StatelessWidget {
                 itemBuilder: (context, index) =>  Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
-                  child: BuildItem(),
+                  child: BuildItem(AppCubit.get(context).account!.Meals[index]),
                   secondaryActions: <Widget>[
                     IconSlideAction(
                       caption: 'Delete',
@@ -33,11 +34,11 @@ class BuildCartPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                itemCount: 3,
+                itemCount: AppCubit.get(context).account!.Meals.length,
               ),
             )
           ],
-        ),
+        ):Container(),
       ),
     );
   }

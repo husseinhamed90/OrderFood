@@ -1,5 +1,6 @@
 import 'package:orderfood/Models/Category.dart';
 import 'package:orderfood/Models/Charachter.dart';
+import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Services.dart';
 
@@ -23,4 +24,9 @@ class Repository{
     final list =await Services.getCategories();
     return list;
   }
+  Future<List<Meal>>getPopularMeals() async{
+    final list =await Services.getPopularMeals();
+    return list;
+  }
+
 }

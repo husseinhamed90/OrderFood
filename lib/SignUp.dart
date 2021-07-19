@@ -230,7 +230,7 @@ class _SignUpState extends State<SignUp> {
                           appCubit.register(username.text,password.text,confirmpassword.text,name.text);
                           // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
                         },
-                        Buttontext: "Update Profile",
+                        Buttontext: "Create Account",
                         textStyle: TextStyle(
                             fontSize: 14.sp,
                             color: Colors.white,

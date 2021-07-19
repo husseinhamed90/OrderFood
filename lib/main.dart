@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Repository.dart';
 import 'package:orderfood/splashScreen.dart';
+import 'package:sqflite/sqflite.dart';
 
 
 void main() async{
@@ -20,6 +21,7 @@ void main() async{
 class MyApp extends StatelessWidget {
   Repository repository;
 
+
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setPreferredOrientations([
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
     // ]);
     return  MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AppCubit(repository)..GetAllCategories()..GetAllResturants()),
+        BlocProvider(create: (_) => AppCubit(repository)),
       ],
       child: ScreenUtilInit(
         builder: () =>  MaterialApp(

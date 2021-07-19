@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Models/Category.dart';
 import 'package:orderfood/Models/Charachter.dart';
+import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Models/UserAccount.dart';
 
@@ -58,8 +59,20 @@ class Services{
   }
 
   static Future<void>UpdateProfile(UserAccount userAccount,String id,AppCubit appCubit)async{
-     await FirebaseFirestore.instance.collection("Users").doc(id).update(userAccount.toJson()).then((value) {
-       appCubit.updateaccount(userAccount);
+
+     await FirebaseFirestore.instance.collection("Users").doc(id).update(userAccount.toJson()).then((value) async {
+       print(userAccount.username);
+       FirebaseAuth _auth = FirebaseAuth.instance;
+       User? user = _auth.currentUser;
+
+       AuthCredential credentials = EmailAuthProvider.credential(email: appCubit.account!.username, password: appCubit.account!.Password);
+       await user!.reauthenticateWithCredential(credentials).then((value){
+         value.user!.updateEmail('${userAccount.username}').then((valueeee) {
+           value.user!.updatePassword(userAccount.Password);
+
+           appCubit.updateaccount(userAccount);
+         });
+       });
      });
   }
   static Future<bool> adddata(Category restaurant)async {
@@ -83,6 +96,18 @@ class Services{
           }
     });
     return restaurants;
+  }
+  static Future<List<Meal>> getPopularMeals() async{
+    List<Meal>meals=[];
+    await FirebaseFirestore.instance
+        .collection('PopularMeals')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for(int i=0;i<querySnapshot.docs.length;i++){
+        meals.add(Meal.fromJson(querySnapshot.docs[i].data() as Map<String, dynamic>));
+      }
+    });
+    return meals;
   }
 
   static Future<List<Restaurant>> getResturants() async{

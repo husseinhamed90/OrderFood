@@ -36,13 +36,13 @@ class _testState extends State<Orders> {
                 ],
               ),
               CustomSizedBox(38),
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => CustomSizedBox(20),
-                  itemBuilder: (context, index) => BuildItem(),
-                  itemCount: 3,
-                ),
-              )
+              // Expanded(
+              //   child: ListView.separated(
+              //     separatorBuilder: (context, index) => CustomSizedBox(20),
+              //     itemBuilder: (context, index) => BuildItem(),
+              //     itemCount: 3,
+              //   ),
+              // )
             ],
           ),
         ),

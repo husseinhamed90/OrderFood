@@ -48,7 +48,8 @@ class HomePage extends StatelessWidget {
             preferredSize: Size.fromHeight(50),
           ),
           bottomNavigationBar: Container(
-            height: 90.h,
+            height: 90,
+
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -70,7 +71,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                    bottom: 20.h,
+                    bottom: 20,
                     child: GestureDetector(
                       onTap: () {
                         appCubit.SetSearchPage();

@@ -92,7 +92,8 @@ class FirstTip extends StatelessWidget {
                             )),
                             onPageChanged: (value){
                               if(value==2){
-                                AppCubit.get(context).LoadData();
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUp(),));
+                                //AppCubit.get(context).LoadData();
                               }
                             },
                           ),

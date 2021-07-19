@@ -1,29 +1,28 @@
 class Meal{
 
-  late String mealname,id;
-  late double mealprice;
-  late int quantity;
-  late bool isInFavouriteList,isInCartList;
+  late String mealname,path,description;
+  String id="";
+  double mealprice=0;
+  int quantity=0;
 
-  Meal(this.mealname, this.id, this.mealprice, this.quantity,
-      this.isInFavouriteList, this.isInCartList);
+  Meal(this.mealname, this.mealprice,this.path);
 
   Meal.fromJson(Map<String, dynamic> json) {
-    mealname = json['username'];
-    mealprice = json['Password'];
+    mealname = json['mealname'];
+    description=json['description'];
+    mealprice = json['mealprice'];
     id = json['id'];
+    path=json['path'];
     quantity = json['quantity'];
-    isInFavouriteList = json['isInFavouriteList'];
-    isInCartList = json['isInCartList'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['mealname'] = this.mealname;
+    data['description'] = this.description;
     data['mealprice'] = this.mealprice;
     data['id'] = this.id;
-    data['isInFavouriteList'] = this.isInFavouriteList;
-    data['isInCartList'] = this.isInCartList;
+    data['path']=this.path;
     data['quantity'] = this.quantity;
     return data;
   }

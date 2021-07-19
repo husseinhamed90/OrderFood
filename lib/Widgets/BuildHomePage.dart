@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Widgets/BuildCategoryItem.dart';
 import 'package:orderfood/Widgets/BuildResturantItem.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'SizedBox.dart';
 class BuildHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //CreateDataBase();
     return RefreshIndicator(
-      onRefresh: () async=> await AppCubit.get(context).GetAllResturants(),
+      onRefresh: () async=> await AppCubit.get(context).LoadData(),
       child: Container(
         color: Color(0xffF8FBFF),
         child: SingleChildScrollView(
@@ -58,7 +60,7 @@ class BuildHomePage extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            "Popular restaurants",
+                            "Popular Meals",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w700),
                           ),
@@ -79,14 +81,14 @@ class BuildHomePage extends StatelessWidget {
                       height: 260,
                       child: ListView.separated(
                         itemBuilder: (context, index) {
-                          return BuildRestirantItem(AppCubit.get(context).resturants[index]);
+                          return BuildRestirantItem(AppCubit.get(context).PopularMeals[index]);
                         },
                         separatorBuilder: (context, index) {
                           return SizedBox(
                             width: 22,
                           );
                         },
-                        itemCount: AppCubit.get(context).resturants.length,
+                        itemCount: AppCubit.get(context).PopularMeals.length,
                         scrollDirection: Axis.horizontal,
                       ),
                     ),
@@ -100,4 +102,12 @@ class BuildHomePage extends StatelessWidget {
       ),
     );
   }
+
+  // late String mealname,path,description;
+  // String id="";
+  // double mealprice=0;
+  // int quantity=0;
+
+
+
 }
