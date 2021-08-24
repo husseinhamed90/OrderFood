@@ -5,6 +5,8 @@ class UserAccount{
   late String id;
   List<Meal>Meals=[];
   List<Meal>favourite=[];
+  Map<String,Meal>mapOfFavouritesMeals={};
+  Map<String,Meal>mapOfCartMeals={};
 
   UserAccount(this.username, this.Password,this.name,this.id);
 
@@ -13,13 +15,9 @@ class UserAccount{
     Password = json['Password'];
     id = json['id'];
     name=json['name'];
-    for(int i=0;i<json['Meals'].length;i++){
-      Meals.add(Meal.fromJson(json['Meals'][i]));
-    }
     for(int i=0;i<json['favourite'].length;i++){
       favourite.add(Meal.fromJson(json['favourite'][i]));
     }
-  
   }
 
   Map<String, dynamic> toJson() {
@@ -28,7 +26,6 @@ class UserAccount{
     data['Password'] = this.Password;
     data['id'] = this.id;
     data['name']=this.name;
-    data['Meals']=Meals.map((e) => e.toJson()).toList();
     data['favourite']=favourite.map((e) => e.toJson()).toList();
     return data;
   }

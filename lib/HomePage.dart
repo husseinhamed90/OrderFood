@@ -7,12 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/LoginPage.dart';
-import 'package:orderfood/Widgets/BuildCategoryItem.dart';
-import 'package:orderfood/Widgets/BuildHomePage.dart';
-import 'package:orderfood/Widgets/BuildResturantItem.dart';
+import 'package:orderfood/Widgets/BuildCartPage.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
-import 'Mealdetails.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 
 class HomePage extends StatelessWidget {
@@ -66,6 +63,11 @@ class HomePage extends StatelessWidget {
                     ],
                     onTap: (value) {
                       appCubit.changeposition(value);
+                      if(appCubit.currentindex==2){
+                        appCubit.calculateTotalPrice();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BuildCartPage()));
+                        appCubit.changeposition(0);
+                      }
                     },
                     selectedItemColor: Color(0xffF9881F),
                   ),
@@ -74,7 +76,7 @@ class HomePage extends StatelessWidget {
                     bottom: 20,
                     child: GestureDetector(
                       onTap: () {
-                        appCubit.SetSearchPage();
+
                       },
                       child: CircleAvatar(
                         child: Icon(Icons.search_outlined,color: Colors.white,),

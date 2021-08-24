@@ -20,17 +20,17 @@ class MealDetails extends StatefulWidget {
 }
 
 class _MealDetailsState extends State<MealDetails> {
-  int counter =0;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state) {
-        if(state is MealAddedToAccount){
+        if(state is MealAddedToAccount||state is mealDeletedFromUserMeals){
           Navigator.pop(context);
         }
       },
       builder: (context, state) {
-        if(state is AddMealToCartLoadingState){
+
+        if(state is addingMealToCartInProgress){
           return Scaffold(
             body: Container(
               child: CircularProgressIndicator(),
@@ -62,9 +62,14 @@ class _MealDetailsState extends State<MealDetails> {
               width: double.infinity,
               buttoncolor: Color(0xffF9881F),
               buttonFunction: () {
-                AppCubit.get(context).AddMealToCart(widget.meal);
+                if(AppCubit.get(context).isMealInCart(widget.meal)==null){
+                  AppCubit.get(context).IncreamentCartNumber(widget.meal);
+                }
+                else{
+                  AppCubit.get(context).deleteMealFromDatabaseCart(widget.meal);
+                }
               },
-              Buttontext: "Add to cart",
+              Buttontext:(!AppCubit.get(context).account!.mapOfCartMeals.containsKey(widget.meal.mealID))? "Add to cart":"Remove Meal From Cart",
               textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -112,9 +117,10 @@ class _MealDetailsState extends State<MealDetails> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                setState(() {
-                                  counter++;
-                                });
+                                // setState(() {
+                                //   widget.meal.quantity++;
+                                // });
+                                AppCubit.get(context).IncreamentCartNumber(widget.meal);
                               },
                               child: FittedBox(
                                 child: Text("+",style: TextStyle(
@@ -125,7 +131,7 @@ class _MealDetailsState extends State<MealDetails> {
                           ),
                           Expanded(
                             child: FittedBox(
-                              child: Text(counter.toString(),style: TextStyle(
+                              child: Text(widget.meal.quantity.toString(),style: TextStyle(
                                   fontSize:20,fontWeight:FontWeight.w700,color: Colors.white
                               ),),
                             ),
@@ -134,8 +140,7 @@ class _MealDetailsState extends State<MealDetails> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if(counter>0)
-                                    counter--;
+                                  AppCubit.get(context).DecreaseCartNumber(widget.meal,widget.meal.quantity);
                                 });
                               },
                               child: FittedBox(

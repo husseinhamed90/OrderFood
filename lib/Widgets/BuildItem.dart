@@ -10,7 +10,6 @@ import 'package:orderfood/Widgets/SizedBox.dart';
 class BuildItem extends StatelessWidget {
   Meal currentmeal;
   BuildItem(this.currentmeal);
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,CubitState>(
@@ -143,7 +142,7 @@ class BuildItem extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  AppCubit.get(context).DecreaseCartNumber(currentmeal);
+                                  AppCubit.get(context).DecreaseCartNumber(currentmeal,currentmeal.quantity);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

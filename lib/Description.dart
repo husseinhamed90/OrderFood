@@ -11,8 +11,8 @@ class _DescriptionState extends State<Description> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 287.w,
-        padding: EdgeInsets.only(left: 44),
+        //width: 287.w,
+        padding: EdgeInsets.only(left: 20),
         child: Text(widget.text,
           style: TextStyle(
               fontSize: 14.sp,

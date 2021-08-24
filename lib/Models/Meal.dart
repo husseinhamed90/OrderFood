@@ -1,7 +1,7 @@
 class Meal{
 
   late String mealname,path,description;
-  String id="";
+  String mealID="";
   double mealprice=0;
   int quantity=0;
 
@@ -11,17 +11,16 @@ class Meal{
     mealname = json['mealname'];
     description=json['description'];
     mealprice = json['mealprice'];
-    id = json['id'];
+    mealID = json['mealID'];
     path=json['path'];
     quantity = json['quantity'];
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['mealname'] = this.mealname;
     data['description'] = this.description;
     data['mealprice'] = this.mealprice;
-    data['id'] = this.id;
+    data['mealID'] = this.mealID;
     data['path']=this.path;
     data['quantity'] = this.quantity;
     return data;

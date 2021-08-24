@@ -16,8 +16,7 @@ class _splashScreenState extends State<splashScreen> {
             width: MediaQuery.of(context).size.width - 110,
             child: TweenAnimationBuilder<double>(
               tween: Tween<double>(begin: 0.0, end: 1),
-              duration:
-              const Duration(milliseconds: 3000),
+              duration: const Duration(milliseconds: 3000),
               builder: (context, value, child) {
                 return Container();
               },

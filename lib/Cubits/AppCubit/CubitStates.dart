@@ -26,8 +26,28 @@ class AccountisUpdated extends CubitState{}
 
 class MealAddedToAccount extends CubitState{}
 class MealAddedToFavourite extends CubitState{}
+class MealAddedToCart extends CubitState{}
 
 class AddMealToCartLoadingState extends CubitState{}
 
 class quantityofMealIncreased extends CubitState{}
 class quantityofMealDecreased extends CubitState{}
+
+class mealInFavourites extends CubitState{}
+class mealInCart extends CubitState{}
+
+class mealDeletedFromUserMeals extends CubitState{}
+class mealDeletedFromUserFavourites extends CubitState{}
+
+class IncreamentCounter extends CubitState{}
+class DecreamentCounter extends CubitState{}
+
+class deleteMealFromFvouritesInProgess extends CubitState{}
+
+class totalPriceIsCalculated extends CubitState{}
+
+class addingMealToCartInProgress extends CubitState{}
+
+class accountisReseted extends CubitState{}
+
+class updateUserAccountInProgress extends CubitState{}

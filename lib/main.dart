@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,33 +18,68 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  Repository repository;
-
+  late Database database;
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    //   DeviceOrientation.portraitDown,
-    // ]);
-    return  MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => AppCubit(repository)),
-      ],
-      child: ScreenUtilInit(
-        builder: () =>  MaterialApp(
 
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            textTheme: GoogleFonts.tajawalTextTheme(
-              Theme.of(context).textTheme,
+    return  FutureBuilder<Database>(
+      future: CreateDataBase(),
+      builder: (context, snapshot) {
+        print("bbbbbbb");
+        print(snapshot.data);
+        if(snapshot.data!=null){
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => AppCubit(Repository(),snapshot.data)),
+            ],
+            child: ScreenUtilInit(
+              builder: () =>  MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: ThemeData(
+                    textTheme: GoogleFonts.tajawalTextTheme(
+                      Theme.of(context).textTheme,
+                    ),
+                  ),
+                  home: splashScreen()
+              ),
+              designSize: Size(375,812),
             ),
-          ),
-          home: splashScreen()
-        ),
-        designSize: Size(375,812),
-        //designSize: Size(812,375),
-      ),
+          );
+        }
+        else{
+          return MaterialApp(
+            home: Scaffold(
+              body: Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
+  }
+
+  Future<Database> CreateDataBase()async{
+     return await openDatabase(
+      "Cart.db"
+      ,version: 1,
+      onCreate: (db, version) {
+        db.execute("CREATE TABLE Cart (id INTEGER PRIMARY KEY,mealname TEXT, description TEXT ,mealprice REAL ,quantity INTEGER ,userID TEXT,path TEXT,mealID TEXT)").then((value) {
+          print("Table is Created");
+        });
+        db.execute("CREATE TABLE Favourites (id INTEGER PRIMARY KEY,mealname TEXT, description TEXT ,mealprice REAL ,quantity INTEGER ,userID TEXT,path TEXT,mealID TEXT)").then((value) {
+          print("Table is Created");
+        });
+      },onOpen: (db) {
+      print("Database is Opened");
+    },).then((value) {
+      print("DataBase Created");
+      database=value;
+      return value;
+
+    });
   }
 }

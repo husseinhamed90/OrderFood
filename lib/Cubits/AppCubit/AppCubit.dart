@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +6,8 @@ import 'package:bloc/bloc.dart';
 import 'package:orderfood/BuildFavouritePage.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Models/Category.dart';
-import 'package:orderfood/Models/Charachter.dart';
 import 'package:orderfood/Models/Meal.dart';
+import 'package:orderfood/Models/Order.dart';
 import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Models/UserAccount.dart';
 import 'package:orderfood/Profile.dart';
@@ -19,98 +17,296 @@ import 'package:orderfood/Widgets/BuildCartPage.dart';
 import 'package:orderfood/Widgets/BuildHomePage.dart';
 import 'package:sqflite/sqflite.dart';
 class AppCubit extends Cubit<CubitState>{
-  Repository repository;
-  late Database database;
-  Future<void> CreateDataBase()async{
-    database =await openDatabase(
-      "Cart.db"
-      ,version: 1,
-      onCreate: (db, version) {
-        db.execute("CREATE TABLE Cart (id INTEGER PRIMARY KEY,MealName TEXT, Description TEXT ,Price INTEGER ,quantity INTEGER)").then((value) {
-          print("Table is Created");
-        });
-      },onOpen: (db) {
-      print("Database is Opened");
-    },).then((value) {
-      print("DataBase Created");
-      return value;
+  late Repository repository;
+  Database ?database;
 
-    });
-  }
   PageController controller =new PageController();
 
-  AppCubit(this.repository) : super(initialState()){
-   repository =new Repository();
-   CreateDataBase();
-  }
+  AppCubit(this.repository,this.database) : super(initialState());
+
+
   List<Widget>pages=[
     BuildHomePage(),
     BuildFavouritePage(),
     BuildCartPage(),
     Profile(),
   ];
+
   int currentindex=0;
   int currentflipindex=0;
+  double total=0.0;
   Widget currentpage = BuildHomePage();
   late User user;
-
   late List<Restaurant> resturants;
   late List<Meal> PopularMeals;
   late List<Category>categories;
-  //late List<int>indexes;
   static AppCubit get(BuildContext context) => BlocProvider.of(context);
 
+  Future getCachedData()async{
+    getUserCartMeals();
+    getUserFavouritesMeals();
+  }
+
+  Future removeCachedData()async{
+    database!.transaction((txn) {
+      return txn.rawDelete('DELETE FROM Cart WHERE userID = "${account!.id}"').then((value) {
+      });
+    });
+    database!.transaction((txn) {
+      return txn.rawDelete('DELETE FROM Favourites WHERE userID = "${account!.id}"').then((value) {
+      });
+    });
+  }
+
+  void calculateTotalPrice(){
+    total=0;
+    account!.Meals.forEach((element) {
+      total+=element.mealprice*element.quantity;
+    });
+    emit(totalPriceIsCalculated());
+  }
   Future<void> UpdateProfileInfo(UserAccount newaccount)async{
-    //account=newaccount;
     emit(LoadingIndicator());
     await Services.UpdateProfile(newaccount,account!.id,this);
-
   }
-  void IncreamentCartNumber(Meal meal){
+  Future IncreamentCartNumber(Meal meal)async{
+    emit(addingMealToCartInProgress());
     meal.quantity++;
+    if(meal.quantity==1){
+      AddMealToCart(meal);
+    }
+    else if(meal.quantity>1){
+      await updateMealInDatabaseCart(meal);
+    }
+    calculateTotalPrice();
+    await updateMealInDatabaseFavourite(meal);
     emit(quantityofMealIncreased());
 
   }
-  void DecreaseCartNumber(Meal meal){
-    if(meal.quantity!=0)
-      meal.quantity--;
+  Future DecreaseCartNumber(Meal meal,int quantity,)async{
+    emit(addingMealToCartInProgress());
+    quantity--;
+    if(quantity>0){
+      meal.quantity=quantity;
+      await updateMealInDatabaseCart(meal);
+      await updateMealInDatabaseFavourite(meal);
+    }
+    else if(quantity==0){
+      meal.quantity=quantity;
+      deleteMealFromDatabaseCart(meal);
+    }
+    calculateTotalPrice();
+
     emit(quantityofMealDecreased());
   }
-  void AddMealToCart(Meal meal){
-    meal.quantity++;
-    InsertIntoDatabase(meal).then((value) {
-      emit(AddMealToCartLoadingState());
-      FirebaseFirestore.instance.collection("Users").doc(account!.id).update(account!.toJson()).then((value) {
-        account!.Meals.add(meal);
-        emit(MealAddedToAccount());
+
+  Future<List<Meal>> AddMealToCart(Meal meal)async{
+    bool mealFound=false;
+    //meal.quantity++;
+    emit(addingMealToCartInProgress());
+    for(int i=0;i<account!.Meals.length;i++){
+      if(account!.Meals[i].mealID==meal.mealID){
+        account!.Meals[i]=meal;
+        account!.mapOfCartMeals[meal.mealID]=meal;
+        mealFound=true;
+      }
+    }
+    if(!mealFound){
+      account!.Meals.add(meal);
+      account!.mapOfCartMeals[meal.mealID]=meal;
+    }
+    calculateTotalPrice();
+    await insertIntoDatabase(meal).then((value) async{
+      await updateMealInDatabaseFavourite(meal);
+      emit(MealAddedToCart());
+      return account!.Meals;
+    });
+    emit(quantityofMealIncreased());
+    return account!.Meals;
+  }
+  Future updateMealInDatabaseCart(Meal meal)async{
+
+    database!.transaction((txn) {
+      return txn.rawUpdate('UPDATE Cart SET quantity = ${meal.quantity} WHERE(userID ="${account!.id}" AND mealID = "${meal.mealID}")').then((value) {
+        print("Record Updated Successfully");
       });
     });
   }
 
-  Future InsertIntoDatabase(Meal meal)async{
-    database.transaction((txn) {
-      //MealName TEXT, Description TEXT ,Price REAL ,quantity INTEGER
-      return txn.rawInsert('INSERT INTO Cart (MealName, Description, Price, quantity) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity})').then((value) {
+  Future updateMealInDatabaseFavourite(Meal meal)async{
+    database!.transaction((txn) {
+      return txn.rawUpdate('UPDATE Favourites SET quantity = ${meal.quantity} WHERE(userID ="${account!.id}" AND mealID = "${meal.mealID}")').then((value) {
+        print("Record Updated Successfully");
+      });
+    });
+  }
+  Future removeMealFromCart(Meal meal)async{
+    for(int i=0;i<account!.Meals.length;i++){
+      if(account!.Meals[i].mealID==meal.mealID){
+        account!.Meals.removeAt(i);
+        account!.mapOfCartMeals.remove(meal.mealID);
+        emit(mealDeletedFromUserMeals());
+      }
+    }
+  }
+
+  Future removeMealFromFavourites(Meal meal)async{
+    for(int i=0;i<account!.favourite.length;i++){
+      if(account!.favourite[i].mealID==meal.mealID){
+        account!.favourite.removeAt(i);
+        account!.mapOfFavouritesMeals.remove(meal.mealID);
+
+        emit(mealDeletedFromUserFavourites());
+        return;
+      }
+    }
+  }
+
+  Future updateAccount()async{
+    emit(updateUserAccountInProgress());
+    await FirebaseFirestore.instance.collection("Users").doc(account!.id).update(account!.toJson()).then((value) {
+      emit(MealAddedToAccount());
+    });
+  }
+  Future resetCubitData()async{
+    total=0;
+    account!.Meals.clear();
+    account!.mapOfCartMeals.clear();
+    PopularMeals.forEach((element) {
+      element.quantity=0;
+    });
+    await removeCachedData();
+    emit(accountisReseted());
+  }
+
+  Future makeOrder()async{
+    Order order =new Order(account!.id, account!.Meals);
+    FirebaseFirestore.instance.collection('Orders').add(order.toJson());
+  }
+
+  Future deleteMealFromDatabaseCart(Meal meal)async{
+    //total-=meal.mealprice*meal.quantity;
+    database!.transaction((txn) {
+      return txn.rawDelete('DELETE FROM Cart WHERE (userID ="${account!.id}" AND mealID = "${meal.mealID}")').then((value) async {
+        removeMealFromCart(meal);
+        meal.quantity=0;
+        await updateMealInDatabaseFavourite(meal);
+        print("Record Deleted Successfully");
+      });
+    });
+  }
+
+  Future<bool> deleteMealFromDatabaseFavourite(Meal meal)async{
+
+    emit(deleteMealFromFvouritesInProgess());
+    database!.transaction((txn) {
+      return txn.rawDelete('DELETE FROM Favourites WHERE (userID ="${account!.id}" AND mealID = "${meal.mealID}")').then((value) {
+        removeMealFromFavourites(meal);
+        meal.quantity=0;
+        print("Record Deleted Successfully");
+        return false;
+      });
+    });
+    return true;
+  }
+
+
+
+  Future getUserCartMeals()async{
+
+    database!.transaction((txn) {
+      return txn.rawQuery('SELECT * FROM Cart WHERE userID = "${account!.id}"').then((value) {
+        print(value.length);
+        value.forEach((element) {
+          print("dfsdfdsd222222222");
+          account!.Meals.add(Meal.fromJson(element));
+          account!.mapOfCartMeals[Meal.fromJson(element).mealID]=Meal.fromJson(element);
+        });
+        account!.Meals.forEach((element) {
+          print(element.mealname);
+        });
+        print("Meals coming Successfully");
+      });
+    });
+  }
+
+  Future getUserFavouritesMeals()async{
+    database!.transaction((txn) {
+      return txn.rawQuery('SELECT * FROM Favourites WHERE userID = "${account!.id}"').then((value) {
+        value.forEach((element) {
+          account!.favourite.add(Meal.fromJson(element));
+          account!.mapOfFavouritesMeals[Meal.fromJson(element).mealID]=Meal.fromJson(element);
+        });
+        account!.favourite.forEach((element) {
+          print(element.mealname);
+        });
+        print("Favourites coming Successfully");
+      });
+    });
+  }
+
+  Future insertIntoDatabase(Meal meal)async{
+   print(database);
+    database!.transaction((txn) {
+      return txn.rawInsert('INSERT INTO Cart (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
         print(value);
         print("Record added Successfully");
       });
-//      INSERT INTO Test(name, value, num) VALUES("some name", 1234, 456.789)
     });
   }
 
-  void AddMealToFavourite(Meal meal){
-    account!.Meals.add(meal);
-    FirebaseFirestore.instance.collection("Users").doc(account!.id).update(account!.toJson());
+  Future insertMealIntoFavourites(Meal meal)async{
+    database!.transaction((txn) {
+      return txn.rawInsert('INSERT INTO Favourites (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
+        print(value);
+        print("Record added Successfully");
+      });
+    });
+  }
+
+  void addMealToFavourite(Meal meal){
+    bool mealFound=false;
+    for(int i=0;i<account!.favourite.length;i++){
+      if(account!.favourite[i].mealID==meal.mealID){
+        account!.favourite[i]=meal;
+        account!.mapOfFavouritesMeals[meal.mealID]=meal;
+        mealFound=true;
+      }
+    }
+    if(!mealFound){
+      account!.favourite.add(meal);
+      account!.mapOfFavouritesMeals[meal.mealID]=meal;
+      insertMealIntoFavourites(meal);
+    }
+    //FirebaseFirestore.instance.collection("Users").doc(account!.id).update(account!.toJson());
     emit(MealAddedToFavourite());
   }
-  bool IsMealInFavourites(){
-    return true;
+  bool IsMealInFavourites(Meal meal){
+    for(int i=0;i<account!.favourite.length;i++){
+      if(account!.favourite[i].mealID==meal.mealID){
+        print("meal found");
+        emit(mealInFavourites());
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Meal? isMealInCart(Meal meal){
+    for(int i=0;i<account!.Meals.length;i++){
+      if(account!.Meals[i].mealID==meal.mealID){
+
+        emit(mealInCart());
+        return account!.Meals[i];
+      }
+    }
+    return null;
   }
   void updateaccount(UserAccount userAccount){
-     account =userAccount;
-     currentindex=0;
-     currentpage=pages[0];
-     emit(AccountisUpdated());
+    account =userAccount;
+    currentindex=0;
+    currentpage=pages[0];
+    emit(AccountisUpdated());
   }
   void SetInitialControllerPage(){
     controller=PageController(initialPage: currentflipindex);
@@ -121,18 +317,8 @@ class AppCubit extends Cubit<CubitState>{
     currentindex=newposition;
     emit(positionchanged());
   }
-  void SetSearchPage(){
-    //currentpage=BuildHomePage();
-   // emit(positionchanged());
-  }
-  Future<void>AddMealToItem(Meal meal)async{
-
-  }
-
   void goToNextPage (PageController controller){
-
     controller.nextPage(duration: kTabScrollDuration, curve: Curves.ease);
-   // emit(GoToNextPageState());
   }
   UserAccount ?account;
   Future<void> register (String username,String password,String confirmpassword,String name)async{
@@ -158,9 +344,6 @@ class AppCubit extends Cubit<CubitState>{
         emit(InvalidRegisteration());
       }
     }
-
-
-
   }
 
   int currentcategoryposition=0;
@@ -168,15 +351,15 @@ class AppCubit extends Cubit<CubitState>{
     currentcategoryposition=index;
     emit(positionchanged());
   }
+
   void Login(String username,String password)async{
     emit(LoadingIndicator());
     account  =await Services.Login(username, password)??null;
-    print(account);
     if(account!=null){
-      await LoadData().then((value) {
+      await LoadData().then((value) async {
+        await getCachedData();
         emit(ValidUserState());
       });
-
     }
     else{
       emit(InvalidUserState());
@@ -184,43 +367,26 @@ class AppCubit extends Cubit<CubitState>{
   }
   Future<void>LoadData()async{
     emit(LoadingIndicator());
-    print("loading is begin");
-    //await GetAllResturants();
     await GetAllCategories();
     await GetPopularMeals();
     emit(DataisInLoaded());
   }
 
-  Future<void> GetAllResturants()async{
-   // emit(loadingCategorieeFromFireBase());
+  Future<List<Restaurant>> GetAllResturants()async{
     await repository.getresturants().then((value) {
       this.resturants=value;
-     // emit(LoadingIsFinished());
     });
+    return resturants;
   }
-  // Future<void>savenewdata()async{
-  //   PopularMeals.forEach((element) {
-  //       FirebaseFirestore.instance.collection("PopularMeals").add(element.toJson()).then((value) {
-  //         FirebaseFirestore.instance.collection("PopularMeals").doc(value.id).update({"id":value.id});
-  //       });
-  //   });
-  // }
 
   Future<void> GetPopularMeals()async{
-    // emit(loadingCategorieeFromFireBase());
     await repository.getPopularMeals().then((value) {
       this.PopularMeals=value;
-      // emit(LoadingIsFinished());
     });
   }
   Future<void> GetAllCategories()async{
-   // emit(loadingCategorieeFromFireBase());
-      await repository.getCategories().then((value) {
+    await repository.getCategories().then((value) {
       this.categories=value;
-      // for(int i=0;i<categories.length;i++){
-      //   indexes.add(i);
-      // }
-     // emit(LoadingIsFinished());
     });
   }
 }

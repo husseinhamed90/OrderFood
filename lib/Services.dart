@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Models/Category.dart';
-import 'package:orderfood/Models/Charachter.dart';
 import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Models/UserAccount.dart';
 
-class Services{
 
+class Services{
 
   static Future<UserAccount?> Login(String username,String password)async{
     try {
@@ -54,7 +52,6 @@ class Services{
     } catch (e) {
       print(e);
       return null;
-
     }
   }
 
@@ -75,6 +72,7 @@ class Services{
        });
      });
   }
+
   static Future<bool> adddata(Category restaurant)async {
     CollectionReference users = FirebaseFirestore.instance.collection('Categories');
     return users.add(restaurant.toJson()).then((value) {
@@ -82,7 +80,6 @@ class Services{
     }).onError((error, stackTrace) {
       return false;
     });
-
   }
 
   static Future<List<Category>> getCategories() async{
@@ -97,6 +94,7 @@ class Services{
     });
     return restaurants;
   }
+
   static Future<List<Meal>> getPopularMeals() async{
     List<Meal>meals=[];
     await FirebaseFirestore.instance
@@ -130,6 +128,5 @@ class Services{
     ));
     response = await dio.get('characters');
     return response.data;
-// Optionally the request above could also be done as
   }
 }

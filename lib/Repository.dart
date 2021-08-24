@@ -6,6 +6,7 @@ import 'package:orderfood/Services.dart';
 
 class Repository{
 
+  Repository();
   Future<List<Charachter>>getdata() async{
 
 
