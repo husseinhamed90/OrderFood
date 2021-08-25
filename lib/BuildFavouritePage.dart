@@ -24,7 +24,7 @@ class BuildFavouritePage extends StatelessWidget {
                 itemBuilder: (context, index) =>  Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
-                  child: BuildItem(AppCubit.get(context).account!.favourite[index]),
+                  child: BuildItem(AppCubit.get(context).account!.mapOfFavouritesMeals.values.elementAt(index)),
                   secondaryActions: <Widget>[
                     IconSlideAction(
                       caption: 'Delete',
@@ -34,7 +34,7 @@ class BuildFavouritePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                itemCount: AppCubit.get(context).account!.favourite.length,
+                itemCount: AppCubit.get(context).account!.mapOfFavouritesMeals.length,
               ),
             )
           ],

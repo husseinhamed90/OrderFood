@@ -35,6 +35,7 @@ class AppCubit extends Cubit<CubitState>{
   int currentindex=0;
   int currentflipindex=0;
   double total=0.0;
+  String payOnArrival="";
   Widget currentpage = BuildHomePage();
   late User user;
   late List<Restaurant> resturants;
@@ -43,8 +44,17 @@ class AppCubit extends Cubit<CubitState>{
   static AppCubit get(BuildContext context) => BlocProvider.of(context);
 
   Future getCachedData()async{
-    getUserCartMeals();
-    getUserFavouritesMeals();
+    await getUserCartMeals();
+    await getUserFavouritesMeals();
+    emit(AccountMealState());
+  }
+
+  bool isMealInFavourites(Meal meal){
+    return account!.mapOfFavouritesMeals.containsKey(meal.mealID);
+  }
+  void changeValueOfpayOnArrival(String value){
+    payOnArrival=value;
+    emit(ChangepayOnArrivalState());
   }
 
   Future removeCachedData()async{
@@ -73,7 +83,7 @@ class AppCubit extends Cubit<CubitState>{
     emit(addingMealToCartInProgress());
     meal.quantity++;
     if(meal.quantity==1){
-      AddMealToCart(meal);
+      addMealToCart(meal);
     }
     else if(meal.quantity>1){
       await updateMealInDatabaseCart(meal);
@@ -83,7 +93,7 @@ class AppCubit extends Cubit<CubitState>{
     emit(quantityofMealIncreased());
 
   }
-  Future DecreaseCartNumber(Meal meal,int quantity,)async{
+  Future decreaseCartNumber(Meal meal,int quantity,)async{
     emit(addingMealToCartInProgress());
     quantity--;
     if(quantity>0){
@@ -96,41 +106,37 @@ class AppCubit extends Cubit<CubitState>{
       deleteMealFromDatabaseCart(meal);
     }
     calculateTotalPrice();
-
     emit(quantityofMealDecreased());
   }
 
-  Future<List<Meal>> AddMealToCart(Meal meal)async{
+  Future addMealToCart(Meal meal)async{
     bool mealFound=false;
-    //meal.quantity++;
     emit(addingMealToCartInProgress());
-    for(int i=0;i<account!.Meals.length;i++){
-      if(account!.Meals[i].mealID==meal.mealID){
-        account!.Meals[i]=meal;
-        account!.mapOfCartMeals[meal.mealID]=meal;
-        mealFound=true;
-      }
+    if(account!.mapOfCartMeals.containsKey(meal.mealID)){
+      account!.mapOfCartMeals[meal.mealID]=meal;
+      mealFound=true;
     }
     if(!mealFound){
-      account!.Meals.add(meal);
       account!.mapOfCartMeals[meal.mealID]=meal;
     }
     calculateTotalPrice();
     await insertIntoDatabase(meal).then((value) async{
       await updateMealInDatabaseFavourite(meal);
       emit(MealAddedToCart());
-      return account!.Meals;
     });
     emit(quantityofMealIncreased());
-    return account!.Meals;
   }
   Future updateMealInDatabaseCart(Meal meal)async{
-
+    updateAccountCart(meal);
     database!.transaction((txn) {
       return txn.rawUpdate('UPDATE Cart SET quantity = ${meal.quantity} WHERE(userID ="${account!.id}" AND mealID = "${meal.mealID}")').then((value) {
-        print("Record Updated Successfully");
+        print("Record Updated Successfully 2");
       });
     });
+  }
+
+  void updateAccountCart(Meal meal) {
+     account!.mapOfCartMeals[meal.mealID]=meal;
   }
 
   Future updateMealInDatabaseFavourite(Meal meal)async{
@@ -141,25 +147,13 @@ class AppCubit extends Cubit<CubitState>{
     });
   }
   Future removeMealFromCart(Meal meal)async{
-    for(int i=0;i<account!.Meals.length;i++){
-      if(account!.Meals[i].mealID==meal.mealID){
-        account!.Meals.removeAt(i);
-        account!.mapOfCartMeals.remove(meal.mealID);
-        emit(mealDeletedFromUserMeals());
-      }
-    }
+    account!.mapOfCartMeals.remove(meal.mealID);
+    emit(mealDeletedFromUserMeals());
   }
 
   Future removeMealFromFavourites(Meal meal)async{
-    for(int i=0;i<account!.favourite.length;i++){
-      if(account!.favourite[i].mealID==meal.mealID){
-        account!.favourite.removeAt(i);
-        account!.mapOfFavouritesMeals.remove(meal.mealID);
-
-        emit(mealDeletedFromUserFavourites());
-        return;
-      }
-    }
+    account!.mapOfFavouritesMeals.remove(meal.mealID);
+    emit(mealDeletedFromUserFavourites());
   }
 
   Future updateAccount()async{
@@ -180,12 +174,11 @@ class AppCubit extends Cubit<CubitState>{
   }
 
   Future makeOrder()async{
-    Order order =new Order(account!.id, account!.Meals);
+    Order order =new Order(account!.id, account!.mapOfCartMeals.values.toList());
     FirebaseFirestore.instance.collection('Orders').add(order.toJson());
   }
 
   Future deleteMealFromDatabaseCart(Meal meal)async{
-    //total-=meal.mealprice*meal.quantity;
     database!.transaction((txn) {
       return txn.rawDelete('DELETE FROM Cart WHERE (userID ="${account!.id}" AND mealID = "${meal.mealID}")').then((value) async {
         removeMealFromCart(meal);
@@ -210,20 +203,11 @@ class AppCubit extends Cubit<CubitState>{
     return true;
   }
 
-
-
   Future getUserCartMeals()async{
-
-    database!.transaction((txn) {
+   await database!.transaction((txn) {
       return txn.rawQuery('SELECT * FROM Cart WHERE userID = "${account!.id}"').then((value) {
-        print(value.length);
         value.forEach((element) {
-          print("dfsdfdsd222222222");
-          account!.Meals.add(Meal.fromJson(element));
           account!.mapOfCartMeals[Meal.fromJson(element).mealID]=Meal.fromJson(element);
-        });
-        account!.Meals.forEach((element) {
-          print(element.mealname);
         });
         print("Meals coming Successfully");
       });
@@ -231,14 +215,10 @@ class AppCubit extends Cubit<CubitState>{
   }
 
   Future getUserFavouritesMeals()async{
-    database!.transaction((txn) {
+    await database!.transaction((txn) {
       return txn.rawQuery('SELECT * FROM Favourites WHERE userID = "${account!.id}"').then((value) {
         value.forEach((element) {
-          account!.favourite.add(Meal.fromJson(element));
           account!.mapOfFavouritesMeals[Meal.fromJson(element).mealID]=Meal.fromJson(element);
-        });
-        account!.favourite.forEach((element) {
-          print(element.mealname);
         });
         print("Favourites coming Successfully");
       });
@@ -249,7 +229,6 @@ class AppCubit extends Cubit<CubitState>{
    print(database);
     database!.transaction((txn) {
       return txn.rawInsert('INSERT INTO Cart (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
-        print(value);
         print("Record added Successfully");
       });
     });
@@ -258,7 +237,6 @@ class AppCubit extends Cubit<CubitState>{
   Future insertMealIntoFavourites(Meal meal)async{
     database!.transaction((txn) {
       return txn.rawInsert('INSERT INTO Favourites (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
-        print(value);
         print("Record added Successfully");
       });
     });
@@ -266,42 +244,18 @@ class AppCubit extends Cubit<CubitState>{
 
   void addMealToFavourite(Meal meal){
     bool mealFound=false;
-    for(int i=0;i<account!.favourite.length;i++){
-      if(account!.favourite[i].mealID==meal.mealID){
-        account!.favourite[i]=meal;
-        account!.mapOfFavouritesMeals[meal.mealID]=meal;
-        mealFound=true;
-      }
+    if(account!.mapOfFavouritesMeals.containsKey(meal.mealID)){
+      account!.mapOfFavouritesMeals[meal.mealID]=meal;
+      mealFound=true;
     }
     if(!mealFound){
-      account!.favourite.add(meal);
       account!.mapOfFavouritesMeals[meal.mealID]=meal;
       insertMealIntoFavourites(meal);
     }
-    //FirebaseFirestore.instance.collection("Users").doc(account!.id).update(account!.toJson());
     emit(MealAddedToFavourite());
   }
-  bool IsMealInFavourites(Meal meal){
-    for(int i=0;i<account!.favourite.length;i++){
-      if(account!.favourite[i].mealID==meal.mealID){
-        print("meal found");
-        emit(mealInFavourites());
-        return true;
-      }
-    }
-    return false;
-  }
 
-  Meal? isMealInCart(Meal meal){
-    for(int i=0;i<account!.Meals.length;i++){
-      if(account!.Meals[i].mealID==meal.mealID){
 
-        emit(mealInCart());
-        return account!.Meals[i];
-      }
-    }
-    return null;
-  }
   void updateaccount(UserAccount userAccount){
     account =userAccount;
     currentindex=0;
@@ -357,7 +311,6 @@ class AppCubit extends Cubit<CubitState>{
     account  =await Services.Login(username, password)??null;
     if(account!=null){
       await LoadData().then((value) async {
-        await getCachedData();
         emit(ValidUserState());
       });
     }
@@ -365,10 +318,17 @@ class AppCubit extends Cubit<CubitState>{
       emit(InvalidUserState());
     }
   }
-  Future<void>LoadData()async{
+  Future LoadData()async{
     emit(LoadingIndicator());
     await GetAllCategories();
     await GetPopularMeals();
+    await getCachedData();
+
+    print(PopularMeals.length);
+    print(categories.length);
+    print(account!.mapOfCartMeals.length);
+    print(account!.mapOfFavouritesMeals.length);
+    print("done");
     emit(DataisInLoaded());
   }
 

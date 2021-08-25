@@ -70,7 +70,7 @@ class BuildCartPage extends StatelessWidget {
               ),
             ),
           ],
-        ):Container(),
+        ):SizedBox(height: 0,),
         body:  BlocConsumer<AppCubit,CubitState>(
           listener: (context, state) {
 
@@ -81,37 +81,35 @@ class BuildCartPage extends StatelessWidget {
                 color: Color(0xffF8FBFF),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: (AppCubit.get(context).account!.Meals.length>0)?Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CustomSizedBox(38),
-                    CustomHeader("Your Cart"),
-                    CustomSizedBox(38),
-                    Expanded(
+                    (AppCubit.get(context).account!.mapOfCartMeals.length>0) ?CustomSizedBox(38):Container(),
+                    (AppCubit.get(context).account!.mapOfCartMeals.length>0) ?CustomHeader("Your Cart"):Container(),
+                    (AppCubit.get(context).account!.mapOfCartMeals.length>0) ?Expanded(
                       child: ListView.separated(
                         separatorBuilder: (context, index) => CustomSizedBox(20),
                         itemBuilder: (context, index) =>  Slidable(
                           actionPane: SlidableDrawerActionPane(),
                           actionExtentRatio: 0.25,
-                          child: BuildItem(AppCubit.get(context).account!.Meals[index]),
+                          child: BuildItem(AppCubit.get(context).account!.mapOfCartMeals.values.elementAt(index)),
                           secondaryActions: <Widget>[
                             IconSlideAction(
                               caption: 'Delete',
                               color: Colors.red,
                               icon: Icons.delete,
                               onTap: () {
-                                AppCubit.get(context).deleteMealFromDatabaseCart(AppCubit.get(context).account!.Meals[index]);
+                                AppCubit.get(context).deleteMealFromDatabaseCart(AppCubit.get(context).account!.mapOfCartMeals.values.elementAt(index));
                               },
                             ),
                           ],
                         ),
-                        itemCount: AppCubit.get(context).account!.Meals.length,
+                        itemCount: AppCubit.get(context).account!.mapOfCartMeals.length,
                       ),
-                    )
+                    ) : Expanded(child: Image.network("https://freepikpsd.com/media/2019/10/empty-cart-png-Transparent-Images.png",width: MediaQuery.of(context).size.width-20,))
                   ],
-                ):Container(),
               ),
-            );
+            ));
           },
         ),
       ),

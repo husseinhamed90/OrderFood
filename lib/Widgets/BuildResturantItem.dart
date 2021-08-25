@@ -17,9 +17,11 @@ class BuildRestirantItem extends StatelessWidget {
 
       },
       builder: (context, state) {
+        print("done done done");
+        print(AppCubit.get(context).account!.mapOfFavouritesMeals.length);
         return  InkWell(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MealDetails(AppCubit.get(context).isMealInCart(restaurant)??restaurant)));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MealDetails(restaurant)));
           },
           child: Container(
             padding:
@@ -111,11 +113,11 @@ class BuildRestirantItem extends StatelessWidget {
                         child: IconButton(
                           icon: Icon(
                             Icons.favorite,
-                            color: (AppCubit.get(context).account!.mapOfFavouritesMeals.containsKey(restaurant.mealID))?Color(0xffFE554A):Colors.black,
+                            color: (AppCubit.get(context).isMealInFavourites(restaurant))?Color(0xffFE554A):Colors.black,
                             size: 18,
                           ),
                           onPressed: () {
-                            if(AppCubit.get(context).IsMealInFavourites(restaurant)){
+                            if(AppCubit.get(context).isMealInFavourites(restaurant)){
                               AppCubit.get(context).deleteMealFromDatabaseFavourite(restaurant);
                             }
                             else{

@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.only(left: 21),
                   child: IconButton(
                     onPressed: () {
-                      _scaffoldKey.currentState!.openDrawer();
+                    _scaffoldKey.currentState!.openDrawer();
                     },
                     icon: Icon(
                       Icons.sort,

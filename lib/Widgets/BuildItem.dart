@@ -142,7 +142,7 @@ class BuildItem extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  AppCubit.get(context).DecreaseCartNumber(currentmeal,currentmeal.quantity);
+                                  AppCubit.get(context).decreaseCartNumber(currentmeal,currentmeal.quantity);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

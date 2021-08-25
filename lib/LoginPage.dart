@@ -51,8 +51,9 @@ class LoginPage extends StatelessWidget {
           builder: (context, state) {
              AppCubit appCubit =AppCubit.get(context);
              if(state is LoadingIndicator){
-               print("ddwwefewfew");
-               return Container(child: Center(child: CircularProgressIndicator()));
+               return Container(child: Center(child: CircularProgressIndicator(
+                 color: Color(0xffF9881F),
+               )));
              }
             return  Container(
               color: Color(0xffF8FBFF),

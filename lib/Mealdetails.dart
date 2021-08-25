@@ -24,9 +24,9 @@ class _MealDetailsState extends State<MealDetails> {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state) {
-        if(state is MealAddedToAccount||state is mealDeletedFromUserMeals){
-          Navigator.pop(context);
-        }
+        // if(state is MealAddedToAccount||state is mealDeletedFromUserMeals){
+        //   Navigator.pop(context);
+        // }
       },
       builder: (context, state) {
 
@@ -62,7 +62,7 @@ class _MealDetailsState extends State<MealDetails> {
               width: double.infinity,
               buttoncolor: Color(0xffF9881F),
               buttonFunction: () {
-                if(AppCubit.get(context).isMealInCart(widget.meal)==null){
+                if(!AppCubit.get(context).account!.mapOfCartMeals.containsKey(widget.meal.mealID)){
                   AppCubit.get(context).IncreamentCartNumber(widget.meal);
                 }
                 else{
@@ -140,7 +140,7 @@ class _MealDetailsState extends State<MealDetails> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  AppCubit.get(context).DecreaseCartNumber(widget.meal,widget.meal.quantity);
+                                  AppCubit.get(context).decreaseCartNumber(widget.meal,widget.meal.quantity);
                                 });
                               },
                               child: FittedBox(

@@ -51,3 +51,7 @@ class addingMealToCartInProgress extends CubitState{}
 class accountisReseted extends CubitState{}
 
 class updateUserAccountInProgress extends CubitState{}
+
+class ChangepayOnArrivalState extends CubitState{}
+
+class AccountMealState extends CubitState{}
