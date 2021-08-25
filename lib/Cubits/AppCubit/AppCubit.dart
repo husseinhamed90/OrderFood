@@ -70,7 +70,7 @@ class AppCubit extends Cubit<CubitState>{
 
   void calculateTotalPrice(){
     total=0;
-    account!.Meals.forEach((element) {
+    account!.mapOfCartMeals.values.toList().forEach((element) {
       total+=element.mealprice*element.quantity;
     });
     emit(totalPriceIsCalculated());

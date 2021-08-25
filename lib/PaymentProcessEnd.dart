@@ -39,7 +39,6 @@ class _PaymentProcessEndState extends State<PaymentProcessEnd> {
             child: Column(
               children: [
                 CustomSizedBox(30),
-                CustomBackButton(),
                 CustomSizedBox(130),
                 Container(
                 padding: EdgeInsets.symmetric(horizontal: 90)

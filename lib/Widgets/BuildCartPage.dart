@@ -35,7 +35,7 @@ class BuildCartPage extends StatelessWidget {
               )),
           preferredSize: Size.fromHeight(50),
         ),
-        bottomSheet:  (AppCubit.get(context).account!.Meals.length>0)?Column(
+        bottomSheet:  (AppCubit.get(context).account!.mapOfCartMeals.length>0)?Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(

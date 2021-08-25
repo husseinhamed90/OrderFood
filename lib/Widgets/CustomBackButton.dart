@@ -14,7 +14,6 @@ class _CustomBackButtonState extends State<CustomBackButton> {
         Navigator.pop(context);
       },
       child: Container(
-
         padding: EdgeInsets.only(left: 26, top: 35),
         child: Container(
           //padding: EdgeInsets.only(left: 26,top: 52),
