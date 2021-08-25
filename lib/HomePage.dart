@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                    bottom: 20,
+                    bottom: 25,
                     child: GestureDetector(
                       onTap: () {
 
@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                       child: CircleAvatar(
                         child: Icon(Icons.search_outlined,color: Colors.white,),
                         backgroundColor: Color(0xffF9881F),
-                        radius: 30,
+                        radius: 28,
                       ),
                     ))
               ],

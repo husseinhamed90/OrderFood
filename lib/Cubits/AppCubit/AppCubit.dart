@@ -62,10 +62,6 @@ class AppCubit extends Cubit<CubitState>{
       return txn.rawDelete('DELETE FROM Cart WHERE userID = "${account!.id}"').then((value) {
       });
     });
-    database!.transaction((txn) {
-      return txn.rawDelete('DELETE FROM Favourites WHERE userID = "${account!.id}"').then((value) {
-      });
-    });
   }
 
   void calculateTotalPrice(){
