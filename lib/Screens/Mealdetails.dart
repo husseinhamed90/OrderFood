@@ -11,7 +11,7 @@ import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 
-import '../Widgets/SizedBox.dart';
+import '../../Widgets/SizedBox.dart';
 class MealDetails extends StatefulWidget {
   Meal meal;
   MealDetails(this.meal);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:orderfood/LoginPage.dart';
+import '../Screens/LoginPage.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../SignUp.dart';
+import '../Screens/SignUp.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 // class BottomButtons extends StatefulWidget {
 //   String buttonname;

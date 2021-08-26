@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import 'package:orderfood/Mealdetails.dart';
+import '../Screens/Mealdetails.dart';
 import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
@@ -13,12 +13,8 @@ class BuildRestirantItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  BlocConsumer<AppCubit,CubitState>(
-      listener: (context, state) {
-
-      },
+      listener: (context, state) {},
       builder: (context, state) {
-        print("done done done");
-        print(AppCubit.get(context).account!.mapOfFavouritesMeals.length);
         return  InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => MealDetails(restaurant)));
@@ -38,7 +34,6 @@ class BuildRestirantItem extends StatelessWidget {
                   height: 100,
                   width: 170,
                   child: Image.network("${restaurant.path}"),
-                  //child: Image.asset("images/burger.png"),
                 ),
                 CustomSizedBox(20),
                 Container(

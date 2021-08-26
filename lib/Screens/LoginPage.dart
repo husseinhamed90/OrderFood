@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import 'package:orderfood/Description.dart';
-import 'package:orderfood/HomePage.dart';
+import 'package:orderfood/Widgets/Description.dart';
+import 'HomePage.dart';
 import 'package:orderfood/Services.dart';
-import 'package:orderfood/SignUp.dart';
+import 'SignUp.dart';
 import 'package:orderfood/Widgets/BottomButtons.dart';
 import 'package:orderfood/Widgets/CustomAppBar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/CustomTextForm.dart';
-//import 'Screens/Description.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 
 class LoginPage extends StatelessWidget {

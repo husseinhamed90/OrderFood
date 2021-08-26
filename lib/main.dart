@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Repository.dart';
-import 'package:orderfood/splashScreen.dart';
+import 'Screens/SplashScreen.dart';
 import 'package:sqflite/sqflite.dart';
 
 
@@ -26,8 +26,6 @@ class MyApp extends StatelessWidget {
     return  FutureBuilder<Database>(
       future: CreateDataBase(),
       builder: (context, snapshot) {
-        print("bbbbbbb");
-        print(snapshot.data);
         if(snapshot.data!=null){
           return MultiBlocProvider(
             providers: [
@@ -41,7 +39,7 @@ class MyApp extends StatelessWidget {
                       Theme.of(context).textTheme,
                     ),
                   ),
-                  home: splashScreen()
+                  home: SplashScreen()
               ),
               designSize: Size(375,812),
             ),
@@ -49,6 +47,7 @@ class MyApp extends StatelessWidget {
         }
         else{
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
               body: Container(
                 child: Center(

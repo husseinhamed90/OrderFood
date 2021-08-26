@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import 'package:orderfood/PaymentPage.dart';
+import '../Screens/PaymentPage.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';

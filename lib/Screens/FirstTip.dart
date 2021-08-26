@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import 'package:orderfood/LoginPage.dart';
+import 'LoginPage.dart';
 import 'package:orderfood/Repository.dart';
 import 'package:orderfood/Services.dart';
 import 'HomePage.dart';
 import 'Orders.dart';
 import 'package:orderfood/Widgets/CustomAppBar.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
-import '../SignUp.dart';
+import 'SignUp.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class FirstTip extends StatelessWidget {

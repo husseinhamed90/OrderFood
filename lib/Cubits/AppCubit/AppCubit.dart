@@ -3,15 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
-import 'package:orderfood/BuildFavouritePage.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Models/Category.dart';
 import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Models/Order.dart';
 import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Models/UserAccount.dart';
-import 'package:orderfood/Profile.dart';
+import '../../Screens/Profile.dart';
 import 'package:orderfood/Repository.dart';
+import '../../Widgets/BuildFavouritePage.dart';
 import 'package:orderfood/Services.dart';
 import 'package:orderfood/Widgets/BuildCartPage.dart';
 import 'package:orderfood/Widgets/BuildHomePage.dart';
@@ -222,7 +222,6 @@ class AppCubit extends Cubit<CubitState>{
   }
 
   Future insertIntoDatabase(Meal meal)async{
-   print(database);
     database!.transaction((txn) {
       return txn.rawInsert('INSERT INTO Cart (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
         print("Record added Successfully");
@@ -319,12 +318,6 @@ class AppCubit extends Cubit<CubitState>{
     await GetAllCategories();
     await GetPopularMeals();
     await getCachedData();
-
-    print(PopularMeals.length);
-    print(categories.length);
-    print(account!.mapOfCartMeals.length);
-    print(account!.mapOfFavouritesMeals.length);
-    print("done");
     emit(DataisInLoaded());
   }
 

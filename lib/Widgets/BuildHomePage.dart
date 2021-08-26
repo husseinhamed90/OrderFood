@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
-import 'package:orderfood/Mealdetails.dart';
+import '../Screens/Mealdetails.dart';
 import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Widgets/BuildCategoryItem.dart';
 import 'package:orderfood/Widgets/BuildResturantItem.dart';

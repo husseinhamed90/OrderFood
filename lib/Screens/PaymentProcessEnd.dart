@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:orderfood/HomePage.dart';
+import 'HomePage.dart';
 import 'package:orderfood/Widgets/CustomBackButton.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';

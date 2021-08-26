@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '/FirstTip.dart';
-class splashScreen extends StatefulWidget {
+import 'FirstTip.dart';
+class SplashScreen extends StatefulWidget {
   @override
   _splashScreenState createState() => _splashScreenState();
 }
 
-class _splashScreenState extends State<splashScreen> {
+class _splashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

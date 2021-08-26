@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import 'package:orderfood/LoginPage.dart';
+import 'LoginPage.dart';
 import 'package:orderfood/Widgets/BuildCartPage.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
