@@ -17,7 +17,9 @@ class BuildRestirantItem extends StatelessWidget {
       builder: (context, state) {
         return  InkWell(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MealDetails(restaurant)));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MealDetails(AppCubit.get(context).isMealInCart(restaurant)
+                ?AppCubit.get(context).account!.mapOfCartMeals[restaurant.mealID]!
+                :restaurant)));
           },
           child: Container(
             padding:

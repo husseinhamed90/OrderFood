@@ -16,7 +16,7 @@ class _CustomHeaderState extends State<CustomHeader> {
         child: Text(
           widget.headertext,
           style: TextStyle(
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
               color: Color(0xff1C1C1C)),
         )

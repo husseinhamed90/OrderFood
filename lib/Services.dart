@@ -30,13 +30,13 @@ class Services{
     }
   }
 
-  static Future<UserAccount?> Register(String username,String password,String name)async{
+  static Future<UserAccount?> Register(String username,String password,String name,String phoneNumber)async{
     try {
       UserCredential userCredential= await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: username,
           password: password
       );
-      UserAccount account =UserAccount(username, password,name,userCredential.user!.uid);
+      UserAccount account =UserAccount(username, password,name,userCredential.user!.uid,phoneNumber);
       DocumentReference documentReference = FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.uid);
       documentReference.set(account.toJson());
       return account;
@@ -62,10 +62,10 @@ class Services{
        FirebaseAuth _auth = FirebaseAuth.instance;
        User? user = _auth.currentUser;
 
-       AuthCredential credentials = EmailAuthProvider.credential(email: appCubit.account!.username, password: appCubit.account!.Password);
+       AuthCredential credentials = EmailAuthProvider.credential(email: appCubit.account!.username, password: appCubit.account!.password);
        await user!.reauthenticateWithCredential(credentials).then((value){
          value.user!.updateEmail('${userAccount.username}').then((valueeee) {
-           value.user!.updatePassword(userAccount.Password);
+           value.user!.updatePassword(userAccount.password);
 
            appCubit.updateaccount(userAccount);
          });

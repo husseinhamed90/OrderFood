@@ -36,10 +36,11 @@ class AppCubit extends Cubit<CubitState>{
   int currentflipindex=0;
   double total=0.0;
   String payOnArrival="";
+  String location ="10 Al Nahda Street";
   Widget currentpage = BuildHomePage();
   late User user;
   late List<Restaurant> resturants;
-  late List<Meal> PopularMeals;
+  List<Meal> PopularMeals=[];
   late List<Category>categories;
   static AppCubit get(BuildContext context) => BlocProvider.of(context);
 
@@ -51,6 +52,9 @@ class AppCubit extends Cubit<CubitState>{
 
   bool isMealInFavourites(Meal meal){
     return account!.mapOfFavouritesMeals.containsKey(meal.mealID);
+  }
+  bool isMealInCart(Meal meal){
+    return account!.mapOfCartMeals.containsKey(meal.mealID);
   }
   void changeValueOfpayOnArrival(String value){
     payOnArrival=value;
@@ -162,6 +166,7 @@ class AppCubit extends Cubit<CubitState>{
     total=0;
     account!.Meals.clear();
     account!.mapOfCartMeals.clear();
+    changeValueOfpayOnArrival("");
     PopularMeals.forEach((element) {
       element.quantity=0;
     });
@@ -270,7 +275,7 @@ class AppCubit extends Cubit<CubitState>{
     controller.nextPage(duration: kTabScrollDuration, curve: Curves.ease);
   }
   UserAccount ?account;
-  Future<void> register (String username,String password,String confirmpassword,String name)async{
+  Future<void> register (String username,String password,String confirmpassword,String name,String phoneNumber)async{
 
     if(username==""||password ==""|| confirmpassword==""){
       emit(EmptyFeildsFound());
@@ -278,7 +283,7 @@ class AppCubit extends Cubit<CubitState>{
     else{
       emit(LoadingIndicator());
       if(password ==confirmpassword){
-        account =await Services.Register(username, password,name)??null;
+        account =await Services.Register(username, password,name,phoneNumber)??null;
 
         if(account!=null){
           await LoadData().then((value) {
@@ -296,8 +301,9 @@ class AppCubit extends Cubit<CubitState>{
   }
 
   int currentcategoryposition=0;
-  Future<void> changecurrentcategory(int index)async{
+  Future<void> changeCurrentCategory(int index)async{
     currentcategoryposition=index;
+    PopularMeals=categories[index].meals;
     emit(positionchanged());
   }
 
@@ -316,7 +322,6 @@ class AppCubit extends Cubit<CubitState>{
   Future LoadData()async{
     emit(LoadingIndicator());
     await GetAllCategories();
-    await GetPopularMeals();
     await getCachedData();
     emit(DataisInLoaded());
   }
@@ -328,11 +333,6 @@ class AppCubit extends Cubit<CubitState>{
     return resturants;
   }
 
-  Future<void> GetPopularMeals()async{
-    await repository.getPopularMeals().then((value) {
-      this.PopularMeals=value;
-    });
-  }
   Future<void> GetAllCategories()async{
     await repository.getCategories().then((value) {
       this.categories=value;

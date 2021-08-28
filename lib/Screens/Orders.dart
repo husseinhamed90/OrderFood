@@ -1,18 +1,17 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/BuildTabText.dart';
 import 'package:orderfood/Widgets/CustomBackButton.dart';
+import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
-class Orders extends StatefulWidget {
-  @override
-  _testState createState() => _testState();
-}
+class Orders extends StatelessWidget {
+  TextEditingController textEditingController = new TextEditingController();
 
-class _testState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,15 +38,14 @@ class _testState extends State<Orders> {
               // Expanded(
               //   child: ListView.separated(
               //     separatorBuilder: (context, index) => CustomSizedBox(20),
-              //     itemBuilder: (context, index) => BuildItem(),
+              //     itemBuilder: (context, index) => BuildItem(AppCubit.get(context).PopularMeals.first),
               //     itemCount: 3,
               //   ),
-              // )
+              // ),
             ],
           ),
         ),
       ),
-      //appBar: AppBar(),
     );
   }
 }

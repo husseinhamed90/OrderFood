@@ -147,6 +147,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
+import 'package:orderfood/Screens/OtpScreen.dart';
 import 'HomePage.dart';
 import 'package:orderfood/Models/UserAccount.dart';
 import 'package:orderfood/Widgets/BottomButtons.dart';
@@ -168,6 +169,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController password =new TextEditingController();
   TextEditingController name =new TextEditingController();
   TextEditingController confirmpassword =new TextEditingController();
+  TextEditingController phoneNumber =new TextEditingController();
 
 
   @override
@@ -175,7 +177,7 @@ class _SignUpState extends State<SignUp> {
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state){
         if(state is ValidUserState){
-           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+       //    Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(phoneNumber.text),));
         }
         else if(state is InvalidRegisteration || state is InvalidUserState){
           final snackBar = SnackBar(content: Text('Invalid Data'),backgroundColor: Colors.orange,);
@@ -215,9 +217,11 @@ class _SignUpState extends State<SignUp> {
                     CustomSizedBox(20),
                     CustomTextForm("Email Address",MediaQuery.of(context).size.width-40,username),
                     CustomSizedBox(20),
-                    CustomTextForm("Password",MediaQuery.of(context).size.width-40,password),
+                    CustomTextForm("Phone Number",MediaQuery.of(context).size.width-40,phoneNumber),
                     CustomSizedBox(20),
-                    CustomTextForm("Confirm Password",MediaQuery.of(context).size.width-40,confirmpassword),
+                    CustomTextForm("Password",MediaQuery.of(context).size.width-40,password,true),
+                    CustomSizedBox(20),
+                    CustomTextForm("Confirm Password",MediaQuery.of(context).size.width-40,confirmpassword,true),
 
                     CustomSizedBox(74),
                     Center(
@@ -227,7 +231,8 @@ class _SignUpState extends State<SignUp> {
                         buttonFunction: () {
                          // UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text, AppCubit.get(context).account!.id);
                           //appCubit.UpdateProfileInfo(updateduseraccount);
-                          appCubit.register(username.text,password.text,confirmpassword.text,name.text);
+                          Navigator.push(context,MaterialPageRoute(builder: (context) =>  OtpScreen(phoneNumber.text,name.text,password.text,confirmpassword.text,username.text),));
+                          //appCubit.register(username.text,password.text,confirmpassword.text,name.text,phoneNumber.text);
                           // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
                         },
                         Buttontext: "Create Account",

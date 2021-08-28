@@ -51,7 +51,7 @@ class _PaymmentDataState extends State<PaymentData> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                //    Expanded(child: CustomTextForm("Exp date",(MediaQuery.of(context).size.width-40)/2)),
+                  // Expanded(child: CustomTextForm("Exp date",(MediaQuery.of(context).size.width-40)/2)),
                     SizedBox(width: 20,),
                   //  Expanded(child: CustomTextForm("CVV",(MediaQuery.of(context).size.width-40)/2)),
                   ],

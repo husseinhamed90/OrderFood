@@ -167,15 +167,18 @@ class _SignUpState extends State<Profile> {
   TextEditingController username =new TextEditingController();
   TextEditingController password =new TextEditingController();
   TextEditingController name =new TextEditingController();
-  TextEditingController confirmpassword =new TextEditingController();
+  TextEditingController confirmPassword =new TextEditingController();
+  TextEditingController phoneNumber =new TextEditingController();
 
 
   @override
   Widget build(BuildContext context) {
     username.text=AppCubit.get(context).account!.username;
-    password.text=AppCubit.get(context).account!.Password;
+    password.text=AppCubit.get(context).account!.password;
     name.text=AppCubit.get(context).account!.name;
-    confirmpassword.text=AppCubit.get(context).account!.Password;
+    confirmPassword.text=AppCubit.get(context).account!.password;
+    phoneNumber.text=AppCubit.get(context).account!.phoneNumber;
+
 
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state){
@@ -190,14 +193,13 @@ class _SignUpState extends State<Profile> {
           final snackBar = SnackBar(content: Text('Some Input Fields Found'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-        // else if(state is AccountisUpdated){
-        //
-        // }
       },
       builder: (context, state) {
         AppCubit appCubit =AppCubit.get(context);
         if(state is LoadingIndicator){
-          return Scaffold(body: Container(child: Center(child: CircularProgressIndicator())));
+          return Scaffold(body: Container(child: Center(child: CircularProgressIndicator(
+            color: Color(0xffF9881F),
+          ))));
         }
         return  Container(
           color: Color(0xffF8FBFF),
@@ -215,9 +217,11 @@ class _SignUpState extends State<Profile> {
                 CustomSizedBox(20),
                 CustomTextForm("Email Address",MediaQuery.of(context).size.width-40,username),
                 CustomSizedBox(20),
-                CustomTextForm("Password",MediaQuery.of(context).size.width-40,password),
+                CustomTextForm("Phone Number",MediaQuery.of(context).size.width-40,phoneNumber),
                 CustomSizedBox(20),
-                CustomTextForm("Confirm Password",MediaQuery.of(context).size.width-40,confirmpassword),
+                CustomTextForm("Password",MediaQuery.of(context).size.width-40,password,true),
+                CustomSizedBox(20),
+                CustomTextForm("Confirm Password",MediaQuery.of(context).size.width-40,confirmPassword,true),
 
                 CustomSizedBox(74),
                 Center(
@@ -225,7 +229,7 @@ class _SignUpState extends State<Profile> {
                     width: MediaQuery.of(context).size.width-70,
                     buttoncolor: Color(0xffF9881F),
                     buttonFunction: () {
-                      UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text, AppCubit.get(context).account!.id);
+                      UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text, AppCubit.get(context).account!.id,phoneNumber.text);
                       appCubit.UpdateProfileInfo(updateduseraccount);
                       //appCubit.register(username.text,password.text,confirmpassword.text,name.text);
                       // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));

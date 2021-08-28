@@ -2,7 +2,7 @@ class Meal{
 
   late String mealname,path,description;
   String mealID="";
-  double mealprice=0;
+  dynamic mealprice=0;
   int quantity=0;
 
   Meal(this.mealname, this.mealprice,this.path);

@@ -30,14 +30,14 @@ class PaymentPage extends StatelessWidget {
               ),
             );
           }
-          return   Scaffold(
+          return Scaffold(
             bottomNavigationBar: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ChangeData("Delivery Fee", Colors.black, "\$20"),
-                ChangeData("Subtotal", Colors.black, "\$${AppCubit.get(context).total}"),
+                ChangeData("Delivery Fee", Colors.black, "\$20",true),
+                ChangeData("Subtotal", Colors.black, "\$${AppCubit.get(context).total}",true),
                 Divider(height: 0.3,color: Colors.black,),
-                ChangeData("Total", Colors.black, "\$${AppCubit.get(context).total+20}"),
+                ChangeData("Total", Colors.black, "\$${AppCubit.get(context).total+20}",true),
                 CustomSizedBox(20),
                 Padding(
                   padding: const EdgeInsets.only(left: 20,right: 20,bottom: 10),
@@ -45,10 +45,11 @@ class PaymentPage extends StatelessWidget {
                     width: double.infinity,
                     buttoncolor: Color(0xffF9881F),
                     buttonFunction: () async{
-                      //  await AppCubit.get(context).updateAccount();
-                      await AppCubit.get(context).makeOrder();
-                      await AppCubit.get(context).resetCubitData();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentProcessEnd(),));
+                      if(AppCubit.get(context).account!.mapOfCartMeals.length>0){
+                        await AppCubit.get(context).makeOrder();
+                        await AppCubit.get(context).resetCubitData();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentProcessEnd(),));
+                      }
                     },
                     Buttontext: "Proceed to Payment",
                     textStyle: TextStyle(
@@ -60,7 +61,6 @@ class PaymentPage extends StatelessWidget {
               ],
             ),
             body: Container(
-
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -69,9 +69,9 @@ class PaymentPage extends StatelessWidget {
                     CustomSizedBox(50),
                     CustomHeader("Delivery method"),
                     CustomSizedBox(30),
-                    ChangeData("137 Teaticket Hwy, East Falmouth MA 2536 137 Teaticket Hwy, East Falmouth MA 2536",Color(0xffFE554A),"change"),
+                    ChangeData(AppCubit.get(context).location,Color(0xffFE554A),"change",true),
                     CustomSizedBox(15),
-                    ChangeData("+234 9011039271",Color(0xffFE554A),"change"),
+                    ChangeData(AppCubit.get(context).account!.phoneNumber,Color(0xffFE554A),"change",false),
                     CustomSizedBox(30),
                     CustomHeader("Payment"),
                     Container(
@@ -100,16 +100,25 @@ class PaymentPage extends StatelessWidget {
                         title: const Text('Pay on arrival',style: TextStyle(
                             fontSize: 15,fontWeight: FontWeight.bold
                         ),),
-                        leading: Radio(
-                          value: "Pay on arrival",
-                          onChanged:(String ?value) {
-                            // setState(() {
-                            //   currentvalue=value!;
-                            // });
-                            AppCubit.get(context).changeValueOfpayOnArrival(value!);
-                          },
-                          groupValue: AppCubit.get(context).payOnArrival,
-                        )
+                        leading: InkWell(
+                          child: Radio(
+                            value: "Pay on arrival",
+                            onChanged:(String ?value) {
+                              AppCubit.get(context).changeValueOfpayOnArrival(value!);
+                            },
+                            groupValue: AppCubit.get(context).payOnArrival,
+                          ),
+                        ),
+                      onTap: () {
+                          if(AppCubit.get(context).payOnArrival==""){
+                            AppCubit.get(context).changeValueOfpayOnArrival("Pay on arrival");
+
+                          }
+                          else{
+                            AppCubit.get(context).changeValueOfpayOnArrival("");
+
+                          }
+                      },
 
                     ),
                     Container(
