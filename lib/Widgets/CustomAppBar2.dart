@@ -75,12 +75,11 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
             Container(
               height: 50,
               width: 45,
-             margin: EdgeInsets.only(right: 15,top: 7),
+              margin: EdgeInsets.only(right: 15,top: 7),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(80))
               ),
-
               child: ClipOval(child: Image.network("https://images.unsplash.com/photo-1586083702768-190ae093d34d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bWFufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80",fit: BoxFit.fitWidth,)),
             ),
           ],

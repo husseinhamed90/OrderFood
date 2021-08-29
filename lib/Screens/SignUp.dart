@@ -176,8 +176,8 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state){
-        if(state is ValidUserState){
-       //    Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(phoneNumber.text),));
+        if(state is goToOtpScreenToEnterOTPCode){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(phoneNumber.text,name.text,password.text,username.text),));
         }
         else if(state is InvalidRegisteration || state is InvalidUserState){
           final snackBar = SnackBar(content: Text('Invalid Data'),backgroundColor: Colors.orange,);
@@ -187,12 +187,20 @@ class _SignUpState extends State<SignUp> {
           final snackBar = SnackBar(content: Text('Some Input Fields Found'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
+        else if(state is invalidNumber){
+          final snackBar = SnackBar(content: Text('Invalid Phone Number'),backgroundColor: Colors.orange,);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
 
       },
       builder: (context, state) {
         AppCubit appCubit =AppCubit.get(context);
-        if(state is LoadingIndicator){
-          return Scaffold(body: Container(child: Center(child: CircularProgressIndicator())));
+        if(state is checkForValidDataAndValidNumber){
+          return Scaffold(
+            body: Container(child: Center(child: CircularProgressIndicator(
+              color: Color(0xffF9881F),
+            ))),
+          );
         }
         return  Scaffold(
             appBar: PreferredSize(
@@ -229,9 +237,11 @@ class _SignUpState extends State<SignUp> {
                         width: MediaQuery.of(context).size.width-70,
                         buttoncolor: Color(0xffF9881F),
                         buttonFunction: () {
-                         // UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text, AppCubit.get(context).account!.id);
-                          //appCubit.UpdateProfileInfo(updateduseraccount);
-                          Navigator.push(context,MaterialPageRoute(builder: (context) =>  OtpScreen(phoneNumber.text,name.text,password.text,confirmpassword.text,username.text),));
+                           appCubit.checkValidSignUpInputs(username.text, password.text, confirmpassword.text, name.text, phoneNumber.text);
+                          //appCubit.UpdateProfileInfo(updatedusera\ccount);
+                          // if(username.text==""||password.text ==""|| confirmpassword.text==""||phoneNumber.text==""||name.text==""){
+                          //   Navigator.push(context,MaterialPageRoute(builder: (context) =>  OtpScreen.withUsrAccount(phoneNumber.text,name.text,password.text,confirmpassword.text,username.text),));
+                          // }
                           //appCubit.register(username.text,password.text,confirmpassword.text,name.text,phoneNumber.text);
                           // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
                         },

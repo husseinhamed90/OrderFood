@@ -36,7 +36,7 @@ class LoginPage extends StatelessWidget {
                    ));
              }
              else if(state is InvalidUserState){
-               final snackBar = SnackBar(content: Text('Invalid Data'));
+               final snackBar = SnackBar(content: Text('Invalid Data'),backgroundColor: Color(0xffF9881F),);
                ScaffoldMessenger.of(context).showSnackBar(snackBar);
              }
              else if(state is DataisInLoaded){
@@ -72,22 +72,6 @@ class LoginPage extends StatelessWidget {
                     CustomTextForm("Password",MediaQuery.of(context).size.width-40,password),
                     CustomSizedBox(74),
                     GoogleButton(),
-                    CustomSizedBox(20),
-                    Center(
-                      child: CustomButtom(
-                        width: MediaQuery.of(context).size.width-70,
-                        buttoncolor: Color(0xffF9881F),
-                        buttonFunction: () {
-                          //appCubit.LoadData();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
-                        },
-                        Buttontext: "Create an account",
-                        textStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
                     CustomSizedBox(20),
                     CustomButtom(
                       width: double.infinity,

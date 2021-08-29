@@ -41,9 +41,60 @@ class AppCubit extends Cubit<CubitState>{
   late User user;
   late List<Restaurant> resturants;
   List<Meal> PopularMeals=[];
+  String verificationId="";
   late List<Category>categories;
   static AppCubit get(BuildContext context) => BlocProvider.of(context);
 
+
+  void setVerificationId(String verifyID){
+    verificationId=verifyID;
+    emit(setverificationIdStata());
+  }
+
+  Future checkValidSignUpInputs(String username,String password,String confirmpassword,String name,String phoneNumber)async{
+    emit(checkForValidDataAndValidNumber());
+    if(username==""||password ==""|| confirmpassword==""||phoneNumber==""||name==""){
+      emit(EmptyFeildsFound());
+    }
+    else{
+      if(password ==confirmpassword){
+        await verifyPhoneNumber(phoneNumber);
+      }
+      else{
+        emit(InvalidRegisteration());
+      }
+
+    }
+  }
+
+  Future verifyPhoneNumber(String phoneNumber)async{
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '+2$phoneNumber',
+      verificationCompleted: (PhoneAuthCredential credential) {
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        emit(invalidNumber());
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        setVerificationId(verificationId);
+
+        emit(goToOtpScreenToEnterOTPCode());
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+  Future checkOTPCode(String otpCode,UserAccount userAccount)async{
+    print(verificationId);
+    print(otpCode);
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: otpCode);
+    await FirebaseAuth.instance.signInWithCredential(credential).then((value)async {
+      await register(userAccount);
+    }).onError((error, stackTrace) {
+      print("error occurred");
+      emit(wrongOTPCode());
+    });
+  }
   Future getCachedData()async{
     await getUserCartMeals();
     await getUserFavouritesMeals();
@@ -275,28 +326,17 @@ class AppCubit extends Cubit<CubitState>{
     controller.nextPage(duration: kTabScrollDuration, curve: Curves.ease);
   }
   UserAccount ?account;
-  Future<void> register (String username,String password,String confirmpassword,String name,String phoneNumber)async{
+  Future<void> register (UserAccount userAccount)async{
 
-    if(username==""||password ==""|| confirmpassword==""){
-      emit(EmptyFeildsFound());
+    emit(LoadingIndicator());
+    account =await Services.Register(userAccount)??null;
+    if(account!=null){
+      await LoadData().then((value) {
+        emit(ValidUserState());
+      });
     }
     else{
-      emit(LoadingIndicator());
-      if(password ==confirmpassword){
-        account =await Services.Register(username, password,name,phoneNumber)??null;
-
-        if(account!=null){
-          await LoadData().then((value) {
-            emit(ValidUserState());
-          });
-        }
-        else{
-          emit(InvalidUserState());
-        }
-      }
-      else{
-        emit(InvalidRegisteration());
-      }
+      emit(InvalidUserState());
     }
   }
 

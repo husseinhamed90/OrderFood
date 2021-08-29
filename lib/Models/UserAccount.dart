@@ -8,7 +8,7 @@ class UserAccount{
   Map<String,Meal>mapOfFavouritesMeals={};
   Map<String,Meal>mapOfCartMeals={};
 
-  UserAccount(this.username, this.password,this.name,this.id,this.phoneNumber);
+  UserAccount(this.username, this.password,this.name,this.phoneNumber);
 
   UserAccount.fromJson(Map<String, dynamic> json) {
     username = json['username'];

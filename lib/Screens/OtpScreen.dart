@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
+import 'package:orderfood/Models/UserAccount.dart';
 import 'package:orderfood/Screens/HomePage.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/BuildTabText.dart';
@@ -17,10 +18,9 @@ class OtpScreen extends StatelessWidget {
   String phoneNumber="";
   String username="";
   String password="";
-  String confirmpassword="";
   String name="";
-  OtpScreen(this.phoneNumber,this.name,this.password,this.confirmpassword,this.username);
-  TextEditingController textEditingController = new TextEditingController();
+
+  OtpScreen(this.phoneNumber,this.name,this.password,this.username);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,10 @@ class OtpScreen extends StatelessWidget {
         listener: (context, state) {
           if(state is ValidUserState){
             Navigator.push(context, MaterialPageRoute(builder: (context) =>HomePage(),));
+          }
+          else if(state is wrongOTPCode){
+            final snackBar = SnackBar(content: Text('Invalid OTP Code'),backgroundColor: Colors.orange,);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },
         builder: (context, state) {
@@ -55,7 +59,7 @@ class OtpScreen extends StatelessWidget {
                       height: 50,
                       width: MediaQuery.of(context).size.width-100,
                       child: PinCodeTextField(
-                        length: 5,
+                        length: 6,
                         keyboardType: TextInputType.number,
                         cursorColor: Colors.black,
                         animationType: AnimationType.fade,
@@ -72,9 +76,10 @@ class OtpScreen extends StatelessWidget {
                         //backgroundColor: Colors.blue.shade50,
                         enableActiveFill: false,
                         //errorAnimationController: errorController,
-                        controller: textEditingController,
-                        onCompleted: (v) async{
-                        await appCubit.register(username,password,confirmpassword,name,phoneNumber);
+                       //controller: textEditingController,
+                        onCompleted: (otpCode) async{
+                          UserAccount userAccount =UserAccount(username, password, name,phoneNumber);
+                          await appCubit.checkOTPCode(otpCode, userAccount);
                         },
                         onChanged: (value) {
                           // print(value);
@@ -86,7 +91,8 @@ class OtpScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CustomButtom(buttoncolor: Color(0xffF9881F), buttonFunction: (){
+                  CustomButtom(buttoncolor: Color(0xffF9881F), buttonFunction: ()async{
+
                     //verification here
                   }, textStyle: TextStyle(
                       fontSize: 15

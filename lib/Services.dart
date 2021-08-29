@@ -30,13 +30,14 @@ class Services{
     }
   }
 
-  static Future<UserAccount?> Register(String username,String password,String name,String phoneNumber)async{
+  static Future<UserAccount?> Register(UserAccount account)async{
     try {
       UserCredential userCredential= await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: username,
-          password: password
+          email: account.username,
+          password: account.password
       );
-      UserAccount account =UserAccount(username, password,name,userCredential.user!.uid,phoneNumber);
+      account.id=userCredential.user!.uid;
+      //UserAccount account =UserAccount(username, password,name,userCredential.user!.uid,phoneNumber);
       DocumentReference documentReference = FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.uid);
       documentReference.set(account.toJson());
       return account;

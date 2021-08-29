@@ -229,10 +229,9 @@ class _SignUpState extends State<Profile> {
                     width: MediaQuery.of(context).size.width-70,
                     buttoncolor: Color(0xffF9881F),
                     buttonFunction: () {
-                      UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text, AppCubit.get(context).account!.id,phoneNumber.text);
+                      UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text,phoneNumber.text);
+                      updateduseraccount.id=AppCubit.get(context).account!.id;
                       appCubit.UpdateProfileInfo(updateduseraccount);
-                      //appCubit.register(username.text,password.text,confirmpassword.text,name.text);
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
                     },
                     Buttontext: "Update Profile",
                     textStyle: TextStyle(

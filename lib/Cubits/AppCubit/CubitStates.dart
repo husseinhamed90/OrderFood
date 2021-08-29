@@ -55,3 +55,13 @@ class updateUserAccountInProgress extends CubitState{}
 class ChangepayOnArrivalState extends CubitState{}
 
 class AccountMealState extends CubitState{}
+
+class setverificationIdStata extends CubitState{}
+
+class goToOtpScreenToEnterOTPCode extends CubitState{}
+
+class wrongOTPCode extends CubitState{}
+
+class checkForValidDataAndValidNumber extends CubitState{}
+
+class invalidNumber extends CubitState {}
