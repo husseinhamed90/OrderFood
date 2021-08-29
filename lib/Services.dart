@@ -37,7 +37,6 @@ class Services{
           password: account.password
       );
       account.id=userCredential.user!.uid;
-      //UserAccount account =UserAccount(username, password,name,userCredential.user!.uid,phoneNumber);
       DocumentReference documentReference = FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.uid);
       documentReference.set(account.toJson());
       return account;
@@ -74,9 +73,12 @@ class Services{
      });
   }
 
-  static Future<bool> adddata(Category restaurant)async {
-    CollectionReference users = FirebaseFirestore.instance.collection('Categories');
-    return users.add(restaurant.toJson()).then((value) {
+  static Future<bool> addData(Meal meal,String categoryId)async {
+    meal.categoryId=categoryId;
+    CollectionReference meals = FirebaseFirestore.instance.collection('Meals');
+    print(categoryId);
+    return meals.add(meal.toJson()).then((value) async{
+      await meals.doc(value.id).update({"mealID":value.id,'mealname':"french"});
       return true;
     }).onError((error, stackTrace) {
       return false;
@@ -88,41 +90,37 @@ class Services{
     await FirebaseFirestore.instance
         .collection('Categories')
         .get()
-        .then((QuerySnapshot querySnapshot) {
+        .then((QuerySnapshot querySnapshot) async {
+
           for(int i=0;i<querySnapshot.docs.length;i++){
-           restaurants.add(Category.fromJson(querySnapshot.docs[i].data() as Map<String, dynamic>));
+           List<Meal>meals = await getMealsOfSpecificCategory(querySnapshot.docs[i]['categoryId']);
+           Category category =Category.fromJson(querySnapshot.docs[i].data() as Map<String, dynamic>);
+           category.meals=meals;
+           restaurants.add(category);
+           print("fffffffff");
+           print(category.meals);
           }
     });
     return restaurants;
   }
 
-  static Future<List<Meal>> getPopularMeals() async{
-    List<Meal>meals=[];
+  static Future<List<Meal>> getMealsOfSpecificCategory(String categoryId) async{
+    List<Meal>restaurants=[];
     await FirebaseFirestore.instance
-        .collection('PopularMeals')
+        .collection('Meals').where("categoryId",isEqualTo: categoryId)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for(int i=0;i<querySnapshot.docs.length;i++){
-        meals.add(Meal.fromJson(querySnapshot.docs[i].data() as Map<String, dynamic>));
-      }
-    });
-    return meals;
-  }
 
-  static Future<List<Restaurant>> getResturants() async{
-    List<Restaurant>restaurants=[];
-    await FirebaseFirestore.instance
-        .collection('Meals')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      for(int i=0;i<querySnapshot.docs.length;i++){
-        restaurants.add(Restaurant.fromJson(querySnapshot.docs[i].data() as Map<String, dynamic>));
+        restaurants.add(Meal.fromJson(querySnapshot.docs[i].data() as Map<String, dynamic>));
       }
     });
     return restaurants;
   }
 
-  static Future<List<dynamic>> getdata() async{
+
+
+  static Future<List<dynamic>> getData() async{
     Response response;
     var dio = Dio(BaseOptions(
       baseUrl: "https://www.breakingbadapi.com/api/"

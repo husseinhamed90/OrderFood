@@ -7,12 +7,6 @@ class Repository{
 
   Repository();
 
-
-  Future<List<Restaurant>>getresturants() async{
-    final list =await Services.getResturants();
-    return list;
-  }
-
   Future<List<Category>>getCategories() async{
     final list =await Services.getCategories();
     return list;

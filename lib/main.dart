@@ -68,10 +68,10 @@ class MyApp extends StatelessWidget {
       "Cart.db"
       ,version: 1,
       onCreate: (db, version) {
-        db.execute("CREATE TABLE Cart (id INTEGER PRIMARY KEY,mealname TEXT, description TEXT ,mealprice REAL ,quantity INTEGER ,userID TEXT,path TEXT,mealID TEXT)").then((value) {
+        db.execute("CREATE TABLE Cart (id INTEGER PRIMARY KEY,mealname TEXT, description TEXT ,mealprice REAL ,quantity INTEGER ,userID TEXT,path TEXT,mealID TEXT,categoryId TEXT)").then((value) {
           print("Table is Created");
         });
-        db.execute("CREATE TABLE Favourites (id INTEGER PRIMARY KEY,mealname TEXT, description TEXT ,mealprice REAL ,quantity INTEGER ,userID TEXT,path TEXT,mealID TEXT)").then((value) {
+        db.execute("CREATE TABLE Favourites (id INTEGER PRIMARY KEY,mealname TEXT, description TEXT ,mealprice REAL ,quantity INTEGER ,userID TEXT,path TEXT,mealID TEXT,categoryId TEXT)").then((value) {
           print("Table is Created");
         });
       },onOpen: (db) {

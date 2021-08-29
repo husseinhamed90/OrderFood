@@ -85,13 +85,10 @@ class AppCubit extends Cubit<CubitState>{
     );
   }
   Future checkOTPCode(String otpCode,UserAccount userAccount)async{
-    print(verificationId);
-    print(otpCode);
     PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: otpCode);
     await FirebaseAuth.instance.signInWithCredential(credential).then((value)async {
       await register(userAccount);
     }).onError((error, stackTrace) {
-      print("error occurred");
       emit(wrongOTPCode());
     });
   }
@@ -105,6 +102,7 @@ class AppCubit extends Cubit<CubitState>{
     return account!.mapOfFavouritesMeals.containsKey(meal.mealID);
   }
   bool isMealInCart(Meal meal){
+    print( account!.mapOfCartMeals.containsKey(meal.mealID));
     return account!.mapOfCartMeals.containsKey(meal.mealID);
   }
   void changeValueOfpayOnArrival(String value){
@@ -218,8 +216,11 @@ class AppCubit extends Cubit<CubitState>{
     account!.Meals.clear();
     account!.mapOfCartMeals.clear();
     changeValueOfpayOnArrival("");
-    PopularMeals.forEach((element) {
-      element.quantity=0;
+    categories.forEach((element) {
+      element.meals.forEach((meal) {
+        meal.quantity=0;
+      });
+
     });
     await removeCachedData();
     emit(accountisReseted());
@@ -279,7 +280,7 @@ class AppCubit extends Cubit<CubitState>{
 
   Future insertIntoDatabase(Meal meal)async{
     database!.transaction((txn) {
-      return txn.rawInsert('INSERT INTO Cart (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
+      return txn.rawInsert('INSERT INTO Cart (mealname, description, mealprice, quantity, userID, path ,mealID,categoryId) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}","${meal.categoryId}")').then((value) {
         print("Record added Successfully");
       });
     });
@@ -287,7 +288,7 @@ class AppCubit extends Cubit<CubitState>{
 
   Future insertMealIntoFavourites(Meal meal)async{
     database!.transaction((txn) {
-      return txn.rawInsert('INSERT INTO Favourites (mealname, description, mealprice, quantity, userID, path ,mealID) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}")').then((value) {
+      return txn.rawInsert('INSERT INTO Favourites (mealname, description, mealprice, quantity, userID, path ,mealID,categoryId) VALUES ("${meal.mealname}","${meal.description}",${meal.mealprice},${meal.quantity},"${account!.id}","${meal.path}","${meal.mealID}","${meal.categoryId}")').then((value) {
         print("Record added Successfully");
       });
     });
@@ -359,20 +360,21 @@ class AppCubit extends Cubit<CubitState>{
       emit(InvalidUserState());
     }
   }
+  // Future getpopular()async{
+  //   PopularMeals = await Services.getPOPULAR();
+  //   PopularMeals.forEach((meal) async{
+  //     await Services.addData(meal,categories[0].categoryId);
+  //   });
+  // }
   Future LoadData()async{
     emit(LoadingIndicator());
     await GetAllCategories();
     await getCachedData();
+
+   // await getpopular();
     emit(DataisInLoaded());
   }
-
-  Future<List<Restaurant>> GetAllResturants()async{
-    await repository.getresturants().then((value) {
-      this.resturants=value;
-    });
-    return resturants;
-  }
-
+  
   Future<void> GetAllCategories()async{
     await repository.getCategories().then((value) {
       this.categories=value;
