@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,12 +5,12 @@ import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'PaymentData.dart';
 import 'PaymentProcessEnd.dart';
-import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/ChangeData.dart';
 import 'package:orderfood/Widgets/CustomBackButton.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
+// ignore: must_be_immutable
 class PaymentPage extends StatelessWidget {
   List<String>paymentmethods =["images/add.png","images/master.png","images/paypal.png"];
   @override
@@ -21,7 +20,7 @@ class PaymentPage extends StatelessWidget {
 
         },
         builder: (context, state){
-          if(state is updateUserAccountInProgress){
+          if(state is UpdateUserAccountInProgress){
             return Scaffold(
               body: Container(
                 child: Center(
@@ -43,7 +42,7 @@ class PaymentPage extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 20,right: 20,bottom: 10),
                   child: CustomButtom(
                     width: double.infinity,
-                    buttoncolor: Color(0xffF9881F),
+                    buttonColor: Color(0xffF9881F),
                     buttonFunction: () async{
                       if(AppCubit.get(context).account!.mapOfCartMeals.length>0){
                         await AppCubit.get(context).makeOrder();
@@ -51,7 +50,7 @@ class PaymentPage extends StatelessWidget {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentProcessEnd(),));
                       }
                     },
-                    Buttontext: "Proceed to Payment",
+                    buttonText: "Proceed to Payment",
                     textStyle: TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -104,18 +103,18 @@ class PaymentPage extends StatelessWidget {
                           child: Radio(
                             value: "Pay on arrival",
                             onChanged:(String ?value) {
-                              AppCubit.get(context).changeValueOfpayOnArrival(value!);
+                              AppCubit.get(context).changeValueOfPayOnArrival(value!);
                             },
                             groupValue: AppCubit.get(context).payOnArrival,
                           ),
                         ),
                       onTap: () {
                           if(AppCubit.get(context).payOnArrival==""){
-                            AppCubit.get(context).changeValueOfpayOnArrival("Pay on arrival");
+                            AppCubit.get(context).changeValueOfPayOnArrival("Pay on arrival");
 
                           }
                           else{
-                            AppCubit.get(context).changeValueOfpayOnArrival("");
+                            AppCubit.get(context).changeValueOfPayOnArrival("");
 
                           }
                       },

@@ -1,28 +1,27 @@
 abstract class CubitState{}
 
-class initialState extends CubitState{}
+class InitialState extends CubitState{}
 class ValidUserState extends CubitState{}
 class InvalidUserState extends CubitState{}
 
-class loadingCategorieeFromFireBase extends CubitState{}
+class LoadingCategoriesFromFireBase extends CubitState{}
 class LoadingIsFinished extends CubitState{}
 
 
-class DataisInLoadingPahse extends CubitState{}
-class DataisInLoaded extends CubitState{}
+class DataIsInLoadingPhase extends CubitState{}
 
 class UserRegistered extends CubitState{}
-class InvalidRegisteration extends CubitState{}
+class InvalidRegistration extends CubitState{}
 
 class LoadingIndicator extends CubitState{}
 
-class positionchanged extends CubitState{}
+class PositionChanged extends CubitState{}
 class GoToNextPageState extends CubitState{}
 
-class EmptyFeildsFound extends CubitState{}
+class EmptyFieldsFound extends CubitState{}
 
-class setcontroll extends CubitState{}
-class AccountisUpdated extends CubitState{}
+class SetControl extends CubitState{}
+class AccountIsUpdated extends CubitState{}
 
 class MealAddedToAccount extends CubitState{}
 class MealAddedToFavourite extends CubitState{}
@@ -30,38 +29,38 @@ class MealAddedToCart extends CubitState{}
 
 class AddMealToCartLoadingState extends CubitState{}
 
-class quantityofMealIncreased extends CubitState{}
-class quantityofMealDecreased extends CubitState{}
+class QuantityOfMealIncreased extends CubitState{}
+class QuantityOfMealDecreased extends CubitState{}
 
-class mealInFavourites extends CubitState{}
-class mealInCart extends CubitState{}
+class MealInFavourites extends CubitState{}
+class MealInCart extends CubitState{}
 
-class mealDeletedFromUserMeals extends CubitState{}
-class mealDeletedFromUserFavourites extends CubitState{}
+class MealDeletedFromUserMeals extends CubitState{}
+class MealDeletedFromUserFavourites extends CubitState{}
 
-class IncreamentCounter extends CubitState{}
-class DecreamentCounter extends CubitState{}
+class IncrementCounter extends CubitState{}
+class DecrementCounter extends CubitState{}
 
-class deleteMealFromFvouritesInProgess extends CubitState{}
+class DeleteMealFromFavouritesInProgress extends CubitState{}
 
-class totalPriceIsCalculated extends CubitState{}
+class TotalPriceIsCalculated extends CubitState{}
 
-class addingMealToCartInProgress extends CubitState{}
+class AddingMealToCartInProgress extends CubitState{}
 
-class accountisReseted extends CubitState{}
+class AccountIsReseated extends CubitState{}
 
-class updateUserAccountInProgress extends CubitState{}
+class UpdateUserAccountInProgress extends CubitState{}
 
-class ChangepayOnArrivalState extends CubitState{}
+class ChangePayOnArrivalState extends CubitState{}
 
 class AccountMealState extends CubitState{}
 
-class setverificationIdStata extends CubitState{}
+class SetVerificationIdState extends CubitState{}
 
-class goToOtpScreenToEnterOTPCode extends CubitState{}
+class GoToOtpScreenToEnterOTPCode extends CubitState{}
 
-class wrongOTPCode extends CubitState{}
+class WrongOTPCode extends CubitState{}
 
-class checkForValidDataAndValidNumber extends CubitState{}
+class CheckForValidDataAndValidNumber extends CubitState{}
 
-class invalidNumber extends CubitState {}
+class InvalidNumber extends CubitState {}

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
+// ignore: must_be_immutable
 class CustomAppBar2 extends StatefulWidget {
   Widget leading;
   CustomAppBar2(this.leading);
@@ -21,8 +22,6 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
           centerTitle: true,
           title: Container(
             alignment: Alignment.center,
-            //height: 45.h,
-            //width: 133.w,
             height: 50,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

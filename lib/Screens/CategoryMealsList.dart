@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import '../Screens/PaymentPage.dart';
 import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
-import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 class CategoryMealsList extends StatelessWidget {
@@ -50,12 +47,12 @@ class CategoryMealsList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomSizedBox(38),
-                      CustomHeader(AppCubit.get(context).categories[AppCubit.get(context).currentcategoryposition].name!),
+                      CustomHeader(AppCubit.get(context).categories[AppCubit.get(context).currentCategoryPosition].name!),
                       Expanded(
                         child: ListView.separated(
                           separatorBuilder: (context, index) => CustomSizedBox(20),
                           itemBuilder: (context, index) => BuildItem(getCorrectMeal(context, index)),
-                          itemCount: AppCubit.get(context).PopularMeals.length,
+                          itemCount: AppCubit.get(context).popularMeals.length,
                         ),
                       )
                     ],
@@ -67,11 +64,11 @@ class CategoryMealsList extends StatelessWidget {
     );
   }
   Meal getCorrectMeal(BuildContext context, int index) {
-    if (AppCubit.get(context).isMealInCart(AppCubit.get(context).PopularMeals[index])) {
-      return AppCubit.get(context).account!.mapOfCartMeals[AppCubit.get(context).PopularMeals[index].mealID]!;
+    if (AppCubit.get(context).isMealInCart(AppCubit.get(context).popularMeals[index])) {
+      return AppCubit.get(context).account!.mapOfCartMeals[AppCubit.get(context).popularMeals[index].mealID]!;
     }
     else {
-      return AppCubit.get(context).PopularMeals[index];
+      return AppCubit.get(context).popularMeals[index];
     }
   }
 }

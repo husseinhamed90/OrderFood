@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
+// ignore: must_be_immutable
 class CustomTextForm extends StatefulWidget {
   String label;
   double width;

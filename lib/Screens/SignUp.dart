@@ -148,9 +148,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Screens/OtpScreen.dart';
-import 'HomePage.dart';
-import 'package:orderfood/Models/UserAccount.dart';
-import 'package:orderfood/Widgets/BottomButtons.dart';
 import 'package:orderfood/Widgets/CustomAppBar.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
@@ -176,18 +173,18 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state){
-        if(state is goToOtpScreenToEnterOTPCode){
+        if(state is GoToOtpScreenToEnterOTPCode){
           Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(phoneNumber.text,name.text,password.text,username.text),));
         }
-        else if(state is InvalidRegisteration || state is InvalidUserState){
+        else if(state is InvalidRegistration || state is InvalidUserState){
           final snackBar = SnackBar(content: Text('Invalid Data'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-        else if(state is EmptyFeildsFound){
+        else if(state is EmptyFieldsFound){
           final snackBar = SnackBar(content: Text('Some Input Fields Found'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-        else if(state is invalidNumber){
+        else if(state is InvalidNumber){
           final snackBar = SnackBar(content: Text('Invalid Phone Number'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
@@ -195,7 +192,7 @@ class _SignUpState extends State<SignUp> {
       },
       builder: (context, state) {
         AppCubit appCubit =AppCubit.get(context);
-        if(state is checkForValidDataAndValidNumber){
+        if(state is CheckForValidDataAndValidNumber){
           return Scaffold(
             body: Container(child: Center(child: CircularProgressIndicator(
               color: Color(0xffF9881F),
@@ -235,7 +232,7 @@ class _SignUpState extends State<SignUp> {
                     Center(
                       child: CustomButtom(
                         width: MediaQuery.of(context).size.width-70,
-                        buttoncolor: Color(0xffF9881F),
+                        buttonColor: Color(0xffF9881F),
                         buttonFunction: () {
                            appCubit.checkValidSignUpInputs(username.text, password.text, confirmpassword.text, name.text, phoneNumber.text);
                           //appCubit.UpdateProfileInfo(updatedusera\ccount);
@@ -245,7 +242,7 @@ class _SignUpState extends State<SignUp> {
                           //appCubit.register(username.text,password.text,confirmpassword.text,name.text,phoneNumber.text);
                           // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
                         },
-                        Buttontext: "Create Account",
+                        buttonText: "Create Account",
                         textStyle: TextStyle(
                             fontSize: 14.sp,
                             color: Colors.white,

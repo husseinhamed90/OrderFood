@@ -4,10 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'LoginPage.dart';
-import 'package:orderfood/Repository.dart';
-import 'package:orderfood/Services.dart';
 import 'HomePage.dart';
-import 'Orders.dart';
 import 'package:orderfood/Widgets/CustomAppBar.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'SignUp.dart';
@@ -17,12 +14,12 @@ class FirstTip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppCubit.get(context).SetInitialControllerPage();
+    AppCubit.get(context).setInitialControllerPage();
 
     return BlocConsumer<AppCubit,CubitState>(
       listener: (context, state) {
 
-        if(state is DataisInLoaded){
+        if(state is DataIsInLoadingPhase){
           Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
         }
       },
@@ -127,17 +124,17 @@ class FirstTip extends StatelessWidget {
                     children: [
                       CustomButtom(
                         width: double.infinity,
-                        buttoncolor: Color(0xffF9881F),buttonFunction: (){
+                        buttonColor: Color(0xffF9881F),buttonFunction: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
-                      },Buttontext: "Create an account",textStyle: TextStyle(
+                      },buttonText: "Create an account",textStyle: TextStyle(
                           fontSize: 14.sp,color: Colors.white,fontWeight: FontWeight.w700
                       ),),
                       CustomSizedBox(20),
                       CustomButtom(
                         width: double.infinity,
-                        buttoncolor:Colors.white,buttonFunction: (){
+                        buttonColor:Colors.white,buttonFunction: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-                      },Buttontext: "login",textStyle:TextStyle(
+                      },buttonText: "login",textStyle:TextStyle(
                           fontSize: 16.sp,color: Color(0xffFE554A),fontWeight: FontWeight.w700
                       ),),
                     ],

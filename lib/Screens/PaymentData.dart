@@ -3,7 +3,6 @@ import 'PaymentProcessEnd.dart';
 import 'package:orderfood/Widgets/CustomBackButton.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
-import 'package:orderfood/Widgets/CustomTextForm.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 class PaymentData extends StatefulWidget {
   @override
@@ -22,11 +21,11 @@ class _PaymmentDataState extends State<PaymentData> {
             padding: const EdgeInsets.only(left: 20,right: 20,bottom: 30),
             child: CustomButtom(
               width: double.infinity,
-              buttoncolor: Color(0xffF9881F),
+              buttonColor: Color(0xffF9881F),
               buttonFunction: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentProcessEnd(),));
               },
-              Buttontext: "Pay now",
+              buttonText: "Pay now",
               textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,

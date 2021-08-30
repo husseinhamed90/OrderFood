@@ -5,8 +5,8 @@ import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import '../Screens/Mealdetails.dart';
 import 'package:orderfood/Models/Meal.dart';
-import 'package:orderfood/Models/Restaurant.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
+// ignore: must_be_immutable
 class BuildRestirantItem extends StatelessWidget {
   Meal restaurant;
   BuildRestirantItem(this.restaurant);
@@ -113,12 +113,12 @@ class BuildRestirantItem extends StatelessWidget {
                             color: (AppCubit.get(context).isMealInFavourites(restaurant))?Color(0xffFE554A):Colors.black,
                             size: 18,
                           ),
-                          onPressed: () {
+                          onPressed: () async{
                             if(AppCubit.get(context).isMealInFavourites(restaurant)){
-                              AppCubit.get(context).deleteMealFromDatabaseFavourite(restaurant);
+                              await AppCubit.get(context).deleteMealFromFavouriteAndUpdateCart(restaurant);
                             }
                             else{
-                              AppCubit.get(context).addMealToFavourite(restaurant);
+                              AppCubit.get(context).addMealToFavourite(AppCubit.get(context).isMealInCart(restaurant)?AppCubit.get(context).account!.mapOfCartMeals[restaurant.mealID]!:restaurant);
                             }
                           },
                           padding: EdgeInsets.zero,

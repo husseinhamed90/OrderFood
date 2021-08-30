@@ -1,15 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Screens/CategoryMealsList.dart';
-import 'package:orderfood/Widgets/BuildCartPage.dart';
-import '../Screens/Mealdetails.dart';
-import 'package:orderfood/Models/Meal.dart';
 import 'package:orderfood/Widgets/BuildCategoryItem.dart';
 import 'package:orderfood/Widgets/BuildResturantItem.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'SizedBox.dart';
 class BuildHomePage extends StatelessWidget {
@@ -22,7 +17,7 @@ class BuildHomePage extends StatelessWidget {
       },
       builder: (context, state) {
         return RefreshIndicator(
-          onRefresh: () async=> await AppCubit.get(context).LoadData(),
+          onRefresh: () async=> await AppCubit.get(context).loadData(),
           child: Container(
             color: Color(0xffF8FBFF),
             child: SingleChildScrollView(
@@ -82,7 +77,7 @@ class BuildHomePage extends StatelessWidget {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryMealsList(),));
                                 },
                                 child: Text(
-                                  "View all(${AppCubit.get(context).PopularMeals.length})",
+                                  "View all(${AppCubit.get(context).popularMeals.length})",
                                   style: TextStyle(
                                       fontSize: 14,
                                       decoration: TextDecoration.underline,
@@ -98,14 +93,14 @@ class BuildHomePage extends StatelessWidget {
                           height: 260,
                           child: ListView.separated(
                             itemBuilder: (context, index) {
-                              return BuildRestirantItem(AppCubit.get(context).PopularMeals[index]);
+                              return BuildRestirantItem(AppCubit.get(context).popularMeals[index]);
                             },
                             separatorBuilder: (context, index) {
                               return SizedBox(
                                 width: 22,
                               );
                             },
-                            itemCount: AppCubit.get(context).PopularMeals.length,
+                            itemCount: AppCubit.get(context).popularMeals.length,
                             scrollDirection: Axis.horizontal,
                           ),
                         ),

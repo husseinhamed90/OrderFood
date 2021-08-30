@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// ignore: must_be_immutable
 class CustomButtom extends StatelessWidget {
-  Color buttoncolor;
-  String Buttontext;
+  Color buttonColor;
+  String buttonText;
   final buttonFunction;
   TextStyle textStyle;
   double width;
-  CustomButtom({required this.buttoncolor, required this.buttonFunction, required this.textStyle, required this.Buttontext,required this.width});
+  CustomButtom({required this.buttonColor, required this.buttonFunction, required this.textStyle, required this.buttonText,required this.width});
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: buttonFunction,
       child: Container(
         decoration: BoxDecoration(
-          color: buttoncolor,
+          color: buttonColor,
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         height: 45,
         width: width,
         alignment: Alignment.center,
-        child: Text(Buttontext,style: textStyle),
+        child: Text(buttonText,style: textStyle),
         //padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
       ),
     );

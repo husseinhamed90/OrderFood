@@ -1,14 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
-import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/BuildTabText.dart';
 import 'package:orderfood/Widgets/CustomBackButton.dart';
-import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
+// ignore: must_be_immutable
 class Orders extends StatelessWidget {
   TextEditingController textEditingController = new TextEditingController();
 

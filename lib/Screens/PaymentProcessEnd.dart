@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
-import 'package:orderfood/Widgets/CustomBackButton.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 class PaymentProcessEnd extends StatefulWidget {
@@ -21,11 +20,11 @@ class _PaymentProcessEndState extends State<PaymentProcessEnd> {
               padding: const EdgeInsets.only(left: 20,right: 20,bottom: 30),
               child: CustomButtom(
                 width: double.infinity,
-                buttoncolor: Color(0xffF9881F),
+                buttonColor: Color(0xffF9881F),
                 buttonFunction: () {
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
                 },
-                Buttontext: "Go back to home",
+                buttonText: "Go back to home",
                 textStyle: TextStyle(
                     fontSize: 14,
                     color: Colors.white,

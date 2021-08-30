@@ -149,12 +149,9 @@ import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'HomePage.dart';
 import 'package:orderfood/Models/UserAccount.dart';
-import 'package:orderfood/Widgets/BottomButtons.dart';
-import 'package:orderfood/Widgets/CustomAppBar.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/CustomTextForm.dart';
-import '../Widgets/Description.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Profile extends StatefulWidget {
@@ -185,11 +182,11 @@ class _SignUpState extends State<Profile> {
         if(state is ValidUserState){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
         }
-        else if(state is InvalidRegisteration || state is InvalidUserState){
+        else if(state is InvalidRegistration || state is InvalidUserState){
           final snackBar = SnackBar(content: Text('Invalid Data'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-        else if(state is EmptyFeildsFound){
+        else if(state is EmptyFieldsFound){
           final snackBar = SnackBar(content: Text('Some Input Fields Found'),backgroundColor: Colors.orange,);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
@@ -227,13 +224,13 @@ class _SignUpState extends State<Profile> {
                 Center(
                   child: CustomButtom(
                     width: MediaQuery.of(context).size.width-70,
-                    buttoncolor: Color(0xffF9881F),
+                    buttonColor: Color(0xffF9881F),
                     buttonFunction: () {
                       UserAccount updateduseraccount =UserAccount(username.text, password.text, name.text,phoneNumber.text);
                       updateduseraccount.id=AppCubit.get(context).account!.id;
-                      appCubit.UpdateProfileInfo(updateduseraccount);
+                      appCubit.updateProfileInfo(updateduseraccount);
                     },
-                    Buttontext: "Update Profile",
+                    buttonText: "Update Profile",
                     textStyle: TextStyle(
                         fontSize: 14.sp,
                         color: Colors.white,

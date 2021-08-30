@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import '../Screens/LoginPage.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../Screens/SignUp.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
-// class BottomButtons extends StatefulWidget {
-//   String buttonname;
-//   BottomButtons(this.buttonname);
-//   @override
-//   _BottomButtonsState createState() => _BottomButtonsState();
-// }
 
-Widget GoogleButton(){
+Widget googleButton(){
   return Container(
     child: Center(
       child: Container(
@@ -49,19 +42,19 @@ Widget GoogleButton(){
   );
 }
 
-Widget BottomButtons(String buttonname,BuildContext context,TextEditingController username,TextEditingController password){
+Widget bottomButtons(String buttonname,BuildContext context,TextEditingController username,TextEditingController password){
   return Center(
     child: Column(
       children: [
-        GoogleButton(),
+        googleButton(),
         CustomSizedBox(20),
         CustomButtom(
           width: double.infinity,
-          buttoncolor: Color(0xffF9881F),
+          buttonColor: Color(0xffF9881F),
           buttonFunction: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp(),));
           },
-          Buttontext: "Create an account",
+          buttonText: "Create an account",
           textStyle: TextStyle(
               fontSize: 14.sp,
               color: Colors.white,
@@ -70,7 +63,7 @@ Widget BottomButtons(String buttonname,BuildContext context,TextEditingControlle
         CustomSizedBox(20),
         CustomButtom(
           width: double.infinity,
-          buttoncolor: Color(0xffF8FBFF),
+          buttonColor: Color(0xffF8FBFF),
           buttonFunction: () {
             // Navigator.push(
             //     context,
@@ -80,7 +73,7 @@ Widget BottomButtons(String buttonname,BuildContext context,TextEditingControlle
             print(username.text);
             print(password.text);
           },
-          Buttontext: buttonname,
+          buttonText: buttonname,
           textStyle: TextStyle(
               fontSize: 16.sp,
               color: Color(0xffFE554A),

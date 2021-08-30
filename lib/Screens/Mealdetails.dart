@@ -1,17 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Models/Meal.dart';
-import 'Cart.dart';
-import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 
 import '../../Widgets/SizedBox.dart';
+// ignore: must_be_immutable
 class MealDetails extends StatefulWidget {
   Meal meal;
   MealDetails(this.meal);
@@ -30,7 +27,7 @@ class _MealDetailsState extends State<MealDetails> {
       },
       builder: (context, state) {
 
-        if(state is addingMealToCartInProgress){
+        if(state is AddingMealToCartInProgress){
           return Scaffold(
             body: Container(
               child: CircularProgressIndicator(),
@@ -60,16 +57,16 @@ class _MealDetailsState extends State<MealDetails> {
             padding: const EdgeInsets.all(8.0),
             child: CustomButtom(
               width: double.infinity,
-              buttoncolor: Color(0xffF9881F),
+              buttonColor: Color(0xffF9881F),
               buttonFunction: () {
                 if(!AppCubit.get(context).account!.mapOfCartMeals.containsKey(widget.meal.mealID)){
-                  AppCubit.get(context).IncreamentCartNumber(widget.meal);
+                  AppCubit.get(context).incrementCartNumber(widget.meal);
                 }
                 else{
-                  AppCubit.get(context).deleteMealFromDatabaseCart(widget.meal);
+                  //AppCubit.get(context).deleteMealFromDatabaseCart(widget.meal);
                 }
               },
-              Buttontext:(!AppCubit.get(context).account!.mapOfCartMeals.containsKey(widget.meal.mealID))? "Add to cart":"Remove Meal From Cart",
+              buttonText:(!AppCubit.get(context).account!.mapOfCartMeals.containsKey(widget.meal.mealID))? "Add to cart":"Remove Meal From Cart",
               textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -120,7 +117,7 @@ class _MealDetailsState extends State<MealDetails> {
                                 // setState(() {
                                 //   widget.meal.quantity++;
                                 // });
-                                AppCubit.get(context).IncreamentCartNumber(widget.meal);
+                                AppCubit.get(context).incrementCartNumber(widget.meal);
                               },
                               child: FittedBox(
                                 child: Text("+",style: TextStyle(

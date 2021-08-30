@@ -5,8 +5,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Models/Meal.dart';
-import 'package:orderfood/Widgets/SizedBox.dart';
 
+// ignore: must_be_immutable
 class BuildItem extends StatelessWidget {
   Meal currentmeal;
   BuildItem(this.currentmeal);
@@ -109,7 +109,7 @@ class BuildItem extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  AppCubit.get(context).IncreamentCartNumber(currentmeal);
+                                  AppCubit.get(context).incrementCartNumber(currentmeal);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

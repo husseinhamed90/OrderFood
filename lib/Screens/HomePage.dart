@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
-import 'package:orderfood/Screens/OtpScreen.dart';
 import 'package:orderfood/Screens/PaymentPage.dart';
 import 'LoginPage.dart';
 import 'package:orderfood/Widgets/BuildCartPage.dart';
@@ -51,7 +49,7 @@ class HomePage extends StatelessWidget {
                   Positioned(
                     child: BottomNavigationBar(
                       type: BottomNavigationBarType.fixed,
-                      currentIndex: appCubit.currentindex,
+                      currentIndex: appCubit.currentIndex,
                       items: [
                         BottomNavigationBarItem(
                             icon: Icon(Icons.home), label: "Home"),
@@ -63,14 +61,14 @@ class HomePage extends StatelessWidget {
                             icon: Icon(Icons.person_rounded), label: "Profile"),
                       ],
                       onTap: (value) {
-                        appCubit.changeposition(value);
-                        if (appCubit.currentindex == 2) {
+                        appCubit.changePosition(value);
+                        if (appCubit.currentIndex == 2) {
                           appCubit.calculateTotalPrice();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BuildCartPage()));
-                          appCubit.changeposition(0);
+                          appCubit.changePosition(0);
                         }
                       },
                       selectedItemColor: Color(0xffF9881F),
@@ -145,7 +143,7 @@ class HomePage extends StatelessWidget {
                             title: Text("My Profile"),
                             leading: Icon(Icons.person_rounded),
                             onTap: () {
-                              appCubit.changeposition(3);
+                              appCubit.changePosition(3);
                               Navigator.pop(context);
                             },
                           ),
@@ -186,7 +184,7 @@ class HomePage extends StatelessWidget {
                             title: Text("Favourite"),
                             leading: Icon(Icons.favorite),
                             onTap: () {
-                              appCubit.changeposition(1);
+                              appCubit.changePosition(1);
                               Navigator.pop(context);
                             },
                           ),
@@ -199,17 +197,17 @@ class HomePage extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       child: CustomButtom(
                         width: 120,
-                        buttoncolor: Color(0xffF9881F),
+                        buttonColor: Color(0xffF9881F),
                         buttonFunction: () async {
                           await FirebaseAuth.instance.signOut();
-                          appCubit.changeposition(0);
+                          appCubit.changePosition(0);
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LoginPage(),
                               ));
                         },
-                        Buttontext: "Log out",
+                        buttonText: "Log out",
                         textStyle: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -220,7 +218,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            body: appCubit.currentpage);
+            body: appCubit.currentPage);
       },
     );
   }

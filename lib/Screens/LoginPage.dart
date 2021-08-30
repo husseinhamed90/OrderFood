@@ -5,16 +5,14 @@ import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Widgets/Description.dart';
 import 'HomePage.dart';
-import 'package:orderfood/Services.dart';
-import 'SignUp.dart';
 import 'package:orderfood/Widgets/BottomButtons.dart';
 import 'package:orderfood/Widgets/CustomAppBar.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/CustomTextForm.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   TextEditingController username =new TextEditingController();
   TextEditingController password =new TextEditingController();
@@ -39,7 +37,7 @@ class LoginPage extends StatelessWidget {
                final snackBar = SnackBar(content: Text('Invalid Data'),backgroundColor: Color(0xffF9881F),);
                ScaffoldMessenger.of(context).showSnackBar(snackBar);
              }
-             else if(state is DataisInLoaded){
+             else if(state is DataIsInLoadingPhase){
                Navigator.push(
                    context,
                    MaterialPageRoute(
@@ -71,15 +69,15 @@ class LoginPage extends StatelessWidget {
                     CustomSizedBox(20),
                     CustomTextForm("Password",MediaQuery.of(context).size.width-40,password),
                     CustomSizedBox(74),
-                    GoogleButton(),
+                    googleButton(),
                     CustomSizedBox(20),
                     CustomButtom(
                       width: double.infinity,
-                      buttoncolor: Color(0xffF8FBFF),
+                      buttonColor: Color(0xffF8FBFF),
                       buttonFunction: () async{
-                        appCubit.Login(username.text, password.text);
+                        appCubit.login(username.text, password.text);
                       },
-                      Buttontext: "Login to my account",
+                      buttonText: "Login to my account",
                       textStyle: TextStyle(
                           fontSize: 16,
                           color: Color(0xffFE554A),

@@ -1,13 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'PaymentPage.dart';
 import 'package:orderfood/Widgets/BuildCartPage.dart';
-import 'package:orderfood/Widgets/BuildItem.dart';
 import 'package:orderfood/Widgets/CustomAppBar2.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
-import 'package:orderfood/Widgets/CustomHeader.dart';
-import 'package:orderfood/Widgets/SizedBox.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -59,11 +54,11 @@ class _CartState extends State<Cart> {
             padding: const EdgeInsets.all(8.0),
             child: CustomButtom(
               width: double.infinity,
-              buttoncolor: Color(0xffF9881F),
+              buttonColor: Color(0xffF9881F),
               buttonFunction: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(),));
               },
-              Buttontext: "Process to payment",
+              buttonText: "Process to payment",
               textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,

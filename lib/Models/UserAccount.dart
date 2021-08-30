@@ -3,7 +3,7 @@ import 'package:orderfood/Models/Meal.dart';
 class UserAccount{
   late String username,password,name,phoneNumber;
   late String id;
-  List<Meal>Meals=[];
+  List<Meal>meals=[];
   List<Meal>favourite=[];
   Map<String,Meal>mapOfFavouritesMeals={};
   Map<String,Meal>mapOfCartMeals={};

@@ -4,6 +4,7 @@ import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Models/Category.dart';
 
+// ignore: must_be_immutable
 class BuildCategoryItem extends StatelessWidget {
   Category category;
   int index;
@@ -26,7 +27,7 @@ class BuildCategoryItem extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(
-                    color: (AppCubit.get(context).currentcategoryposition==index)?
+                    color: (AppCubit.get(context).currentCategoryPosition==index)?
                     Colors.black:Color(0xffF9881F),
                     width: 1,
                   )),

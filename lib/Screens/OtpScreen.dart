@@ -1,18 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orderfood/Cubits/AppCubit/AppCubit.dart';
 import 'package:orderfood/Cubits/AppCubit/CubitStates.dart';
 import 'package:orderfood/Models/UserAccount.dart';
 import 'package:orderfood/Screens/HomePage.dart';
-import 'package:orderfood/Widgets/BuildItem.dart';
-import 'package:orderfood/Widgets/BuildTabText.dart';
 import 'package:orderfood/Widgets/CustomBackButton.dart';
 import 'package:orderfood/Widgets/CustomButton.dart';
 import 'package:orderfood/Widgets/CustomHeader.dart';
 import 'package:orderfood/Widgets/SizedBox.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+// ignore: must_be_immutable
 class OtpScreen extends StatelessWidget {
 
   String phoneNumber="";
@@ -30,7 +28,7 @@ class OtpScreen extends StatelessWidget {
           if(state is ValidUserState){
             Navigator.push(context, MaterialPageRoute(builder: (context) =>HomePage(),));
           }
-          else if(state is wrongOTPCode){
+          else if(state is WrongOTPCode){
             final snackBar = SnackBar(content: Text('Invalid OTP Code'),backgroundColor: Colors.orange,);
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
@@ -91,12 +89,12 @@ class OtpScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CustomButtom(buttoncolor: Color(0xffF9881F), buttonFunction: ()async{
+                  CustomButtom(buttonColor: Color(0xffF9881F), buttonFunction: ()async{
 
                     //verification here
                   }, textStyle: TextStyle(
                       fontSize: 15
-                  ), Buttontext: "Submit", width: MediaQuery.of(context).size.width-35),
+                  ), buttonText: "Submit", width: MediaQuery.of(context).size.width-35),
                   SizedBox(height: 15,)
                 ],
               ),

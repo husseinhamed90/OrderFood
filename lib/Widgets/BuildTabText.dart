@@ -2,10 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: must_be_immutable
 class BuildTabText extends StatefulWidget {
-  double height,width,Opacity,marginL,marginR;
+  double height,width,opacity,marginL,marginR;
   String label;
-  BuildTabText(this.height,this.width,this.label,this.Opacity,this.marginL,this.marginR);
+  BuildTabText(this.height,this.width,this.label,this.opacity,this.marginL,this.marginR);
   @override
   _BuildTabTextState createState() => _BuildTabTextState();
 }
@@ -24,7 +25,7 @@ class _BuildTabTextState extends State<BuildTabText> {
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 17.sp,
-              color: Color(0xff000000).withOpacity(widget.Opacity),
+              color: Color(0xff000000).withOpacity(widget.opacity),
               fontWeight: FontWeight.w700),
         ));
   }

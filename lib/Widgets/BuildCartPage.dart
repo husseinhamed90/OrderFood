@@ -58,11 +58,11 @@ class BuildCartPage extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: CustomButtom(
                 width: double.infinity,
-                buttoncolor: Color(0xffF9881F),
+                buttonColor: Color(0xffF9881F),
                 buttonFunction: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(),));
                 },
-                Buttontext:("Process to payment"),
+                buttonText:("Process to payment"),
                 textStyle: TextStyle(
                     fontSize: 14,
                     color: Colors.white,
@@ -99,7 +99,7 @@ class BuildCartPage extends StatelessWidget {
                               color: Colors.red,
                               icon: Icons.delete,
                               onTap: () {
-                                AppCubit.get(context).deleteMealFromDatabaseCart(AppCubit.get(context).account!.mapOfCartMeals.values.elementAt(index));
+                                AppCubit.get(context).deleteMealFromCartAndUpdateFavourite(AppCubit.get(context).account!.mapOfCartMeals.values.elementAt(index));
                               },
                             ),
                           ],
